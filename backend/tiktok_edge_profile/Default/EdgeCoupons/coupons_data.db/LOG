@@ -1,5 +1,15 @@
-2026/10/19-01:13:07.008 42a8 Creating DB C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default\EdgeCoupons/coupons_data.db since it was missing.
-2026/10/19-01:13:07.016 42a8 Reusing MANIFEST C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
-2026/10/19-01:13:07.188 5bcc Level-0 table #5: started
-2026/10/19-01:13:07.194 5bcc Level-0 table #5: 683284 bytes OK
-2026/10/19-01:13:07.196 5bcc Delete type=0 #3
+2026/10/19-13:26:13.264 511c Reusing MANIFEST C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/10/19-13:26:13.266 511c Recovering log #29
+2026/10/19-13:26:13.267 511c Reusing old log C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default\EdgeCoupons/coupons_data.db/000029.log 
+2026/10/19-13:26:13.326 5d9c Level-0 table #33: started
+2026/10/19-13:26:13.344 5d9c Level-0 table #33: 683444 bytes OK
+2026/10/19-13:26:13.349 5d9c Delete type=0 #29
+2026/10/19-13:26:13.350 3078 Compacting 4@0 + 1@1 files
+2026/10/19-13:26:13.356 3078 Generated table #34@0: 4 keys, 683351 bytes
+2026/10/19-13:26:13.356 3078 Compacted 4@0 + 1@1 files => 683351 bytes
+2026/10/19-13:26:13.358 3078 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/10/19-13:26:13.359 3078 Delete type=2 #21
+2026/10/19-13:26:13.359 3078 Delete type=2 #24
+2026/10/19-13:26:13.359 3078 Delete type=2 #27
+2026/10/19-13:26:13.359 3078 Delete type=2 #30
+2026/10/19-13:26:13.359 3078 Delete type=2 #33
