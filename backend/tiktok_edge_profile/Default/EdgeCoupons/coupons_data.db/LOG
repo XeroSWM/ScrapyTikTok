@@ -1,0 +1,5 @@
+2026/10/19-01:13:07.008 42a8 Creating DB C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default\EdgeCoupons/coupons_data.db since it was missing.
+2026/10/19-01:13:07.016 42a8 Reusing MANIFEST C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/10/19-01:13:07.188 5bcc Level-0 table #5: started
+2026/10/19-01:13:07.194 5bcc Level-0 table #5: 683284 bytes OK
+2026/10/19-01:13:07.196 5bcc Delete type=0 #3

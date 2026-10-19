@@ -1,122 +1,114 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from "react";
+import { Play, Radio, BarChart3 } from "lucide-react";
+import Navbar from "./components/Navbar";
+import ExtractorPage from "./pages/ExtractorPage";
+import LanAccessPage from "./pages/LanAccessPage";
+import MetricsPage from "./pages/MetricsPage";
+import { fetchSystemInfo, connectScraperSocket } from "./services/api";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [activeTab, setActiveTab] = useState("extractor"); // "extractor" | "lan" | "metrics"
+  const [lanIp, setLanIp] = useState("192.168.1.15");
+  const [lanPort, setLanPort] = useState("5173");
+  const [loading, setLoading] = useState(false);
+  const [logs, setLogs] = useState(["[READY] Interfaz conectada y lista."]);
+  const [scrapedData, setScrapedData] = useState(null);
+
+  useEffect(() => {
+    fetchSystemInfo().then((info) => {
+      if (info?.local_ip) setLanIp(info.local_ip);
+    });
+  }, []);
+
+  const handleStartScrape = (username, target) => {
+    setLoading(true);
+    setLogs((prev) => [...prev, `[INIT] Iniciando socket para @${username} (${target})...`]);
+
+    connectScraperSocket({
+      username,
+      target,
+      onLog: (msg) => setLogs((prev) => [...prev, msg]),
+      onResult: (data) => {
+        setScrapedData(data);
+        setLoading(false);
+      },
+      onError: (err) => {
+        setLogs((prev) => [...prev, `[ERROR] ${err}`]);
+        setLoading(false);
+      }
+    });
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="min-h-screen bg-[#070b14] text-slate-200 font-sans p-4 md:p-8">
+      <div className="max-w-7xl mx-auto space-y-6">
+        <Navbar
+          lanIp={lanIp}
+          lanPort={lanPort}
+          onOpenMobile={() => setActiveTab("lan")}
+        />
 
-      <div className="ticks"></div>
+        {/* Solo las 3 pestañas funcionales */}
+        <nav className="flex items-center gap-2 border-b border-slate-800/80 pb-3">
+          <button
+            onClick={() => setActiveTab("extractor")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition ${
+              activeTab === "extractor"
+                ? "bg-rose-500 text-white shadow-lg shadow-rose-500/20"
+                : "text-slate-400 hover:text-white hover:bg-slate-900"
+            }`}
+          >
+            <Play className="w-4 h-4 fill-current" /> Extractor en Vivo
+          </button>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+          <button
+            onClick={() => setActiveTab("lan")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition ${
+              activeTab === "lan"
+                ? "bg-cyan-500 text-white shadow-lg shadow-cyan-500/20"
+                : "text-slate-400 hover:text-white hover:bg-slate-900"
+            }`}
+          >
+            <Radio className="w-4 h-4" /> Acceso Móvil LAN & QR
+          </button>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+          <button
+            onClick={() => setActiveTab("metrics")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition ${
+              activeTab === "metrics"
+                ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20"
+                : "text-slate-400 hover:text-white hover:bg-slate-900"
+            }`}
+          >
+            <BarChart3 className="w-4 h-4" /> Resultados & Métricas
+          </button>
+        </nav>
+
+        <main>
+          {activeTab === "extractor" && (
+            <ExtractorPage
+              onStartScrape={handleStartScrape}
+              loading={loading}
+              logs={logs}
+              data={scrapedData}
+              onGoMetrics={() => setActiveTab("metrics")}
+            />
+          )}
+
+          {activeTab === "lan" && (
+            <LanAccessPage
+              lanIp={lanIp}
+              lanPort={lanPort}
+              setLanIp={setLanIp}
+              setLanPort={setLanPort}
+            />
+          )}
+
+          {activeTab === "metrics" && (
+            <MetricsPage data={scrapedData} />
+          )}
+        </main>
+      </div>
+    </div>
+  );
 }
-
-export default App
