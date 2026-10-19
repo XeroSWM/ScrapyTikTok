@@ -18,7 +18,7 @@ class TikTokScraperService:
         try:
             val = int(num)
             if val < 0:
-                # Corrección de overflow de 32-bits en TikTok (ej. Khaby Lame > 2.14B likes)
+                # Corrección de overflow de 32-bits en TikTok (ej. Khaby Lame > 2.14B likes
                 val = val + 4294967296
             if val >= 1_000_000_000:
                 return f"{round(val / 1_000_000_000, 1)}B"
