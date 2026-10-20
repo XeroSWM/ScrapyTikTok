@@ -1,8 +1,8 @@
-2026/10/19-23:45:45.544 5c1c Reusing MANIFEST C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default\Local Storage\leveldb/MANIFEST-000001
-2026/10/19-23:45:45.545 5c1c Recovering log #50
-2026/10/19-23:45:45.545 5c1c Level-0 table #53: started
-2026/10/19-23:45:45.549 5c1c Level-0 table #53: 46064 bytes OK
-2026/10/19-23:45:45.550 5c1c Recovering log #53
-2026/10/19-23:45:45.552 5c1c Reusing old log C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default\Local Storage\leveldb/000053.log 
-2026/10/19-23:45:45.554 5c1c Delete type=0 #50
-2026/10/19-23:45:45.554 5c1c Delete type=2 #54
+2026/10/20-00:05:23.705 4638 Reusing MANIFEST C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default\Local Storage\leveldb/MANIFEST-000001
+2026/10/20-00:05:23.706 4638 Recovering log #53
+2026/10/20-00:05:23.706 4638 Level-0 table #55: started
+2026/10/20-00:05:23.710 4638 Level-0 table #55: 45441 bytes OK
+2026/10/20-00:05:23.710 4638 Recovering log #55
+2026/10/20-00:05:23.712 4638 Reusing old log C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default\Local Storage\leveldb/000055.log 
+2026/10/20-00:05:23.714 4638 Delete type=0 #53
+2026/10/20-00:05:23.714 4638 Delete type=2 #56
