@@ -16,3 +16,20 @@ __pycache__/
 # Logs y capturas de depuración
 *.log
 debug_page.png
+
+# Perfil y datos temporales de Edge/Playwright
+backend/tiktok_edge_profile/
+tiktok_edge_profile/
+SingletonLock
+
+# Archivos de autenticación local
+auth.json
+
+# Caché de Python
+__pycache__/
+*.pyc
+
+# Node y dependencias
+node_modules/
+dist/
+.expo/
