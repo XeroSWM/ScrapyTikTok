@@ -20,13 +20,22 @@ export default function App() {
     });
   }, []);
 
-  const handleStartScrape = (username, target) => {
+  const handleClearLogs = () => {
+    setLogs(["[READY] Registro de consola reiniciado."]);
+  };
+
+  const handleStartScrape = (username, target, limitsConfig = {}) => {
     setLoading(true);
-    setLogs((prev) => [...prev, `[INIT] Iniciando socket para @${username} (${target})...`]);
+    setLogs((prev) => [
+      ...prev,
+      `[INIT] Iniciando extracción para @${username} (${target})...`,
+      `[CONFIG] Límites: ${limitsConfig.max_videos || 19} videos, ${limitsConfig.max_comment_videos || 2} para comentarios, ${limitsConfig.max_following || 20} seguidos, ${limitsConfig.max_followers || 20} seguidores.`
+    ]);
 
     connectScraperSocket({
       username,
       target,
+      ...limitsConfig,
       onLog: (msg) => setLogs((prev) => [...prev, msg]),
       onResult: (data) => {
         setScrapedData(data);
@@ -48,7 +57,7 @@ export default function App() {
           onOpenMobile={() => setActiveTab("lan")}
         />
 
-        {/* Solo las 3 pestañas funcionales */}
+        {/* Barra de navegación de pestañas */}
         <nav className="flex items-center gap-2 border-b border-slate-800/80 pb-3">
           <button
             onClick={() => setActiveTab("extractor")}
@@ -92,6 +101,7 @@ export default function App() {
               logs={logs}
               data={scrapedData}
               onGoMetrics={() => setActiveTab("metrics")}
+              onClearLogs={handleClearLogs}
             />
           )}
 

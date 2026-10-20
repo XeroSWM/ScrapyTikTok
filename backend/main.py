@@ -17,6 +17,10 @@ app.add_middleware(
 class ScrapeRequest(BaseModel):
     username: str
     target: str = "all"
+    max_videos: int = 19
+    max_comment_videos: int = 2
+    max_following: int = 20
+    max_followers: int = 20
 
 @app.get("/api/info")
 def get_system_info():
@@ -28,7 +32,14 @@ def get_system_info():
 @app.post("/api/scrape")
 async def run_scrape_endpoint(payload: ScrapeRequest):
     service = TikTokScraperService()
-    results = await service.scrape(payload.username, payload.target)
+    results = await service.scrape(
+        username=payload.username,
+        target=payload.target,
+        max_videos=payload.max_videos,
+        max_comment_videos=payload.max_comment_videos,
+        max_following=payload.max_following,
+        max_followers=payload.max_followers
+    )
     return results
 
 @app.websocket("/ws/scrape")
@@ -38,12 +49,25 @@ async def websocket_scrape_endpoint(websocket: WebSocket):
         data = await websocket.receive_json()
         username = data.get("username", "")
         target = data.get("target", "all")
+        
+        # Extracción de los límites configurables con fallbacks
+        max_videos = int(data.get("max_videos", 19))
+        max_comment_videos = int(data.get("max_comment_videos", 2))
+        max_following = int(data.get("max_following", 20))
+        max_followers = int(data.get("max_followers", 20))
 
         async def send_log_to_client(message: str):
             await websocket.send_json({"type": "log", "message": message})
 
         service = TikTokScraperService(log_callback=send_log_to_client)
-        final_data = await service.scrape(username, target)
+        final_data = await service.scrape(
+            username=username,
+            target=target,
+            max_videos=max_videos,
+            max_comment_videos=max_comment_videos,
+            max_following=max_following,
+            max_followers=max_followers
+        )
         
         await websocket.send_json({"type": "result", "data": final_data})
     except WebSocketDisconnect:

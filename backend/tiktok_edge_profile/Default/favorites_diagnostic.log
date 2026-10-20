@@ -140,3 +140,146 @@
 2026-10-19 21:29:22.097: [INFO] BookmarksLoadDropped droppedNodes=0
 2026-10-19 21:29:22.097: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
 2026-10-19 21:30:22.225: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 03:25:08.982: [INFO] CurrentProfilePath: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 03:25:08.982: [INFO] Profiles total count: 1
+2026-10-20 03:25:08.982: [INFO] Profile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-19T21:29:22.042Z
+2026-10-20 03:25:08.982: [INFO] LastUsedProfileDir: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 03:25:08.982: [INFO] MostRecentlyActiveProfile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-19T21:29:22.042Z
+2026-10-20 03:25:08.982: [INFO] VisibilityChanged: 0
+2026-10-20 03:25:09.111: [INFO] OnDoneLoading sync enabled: 0
+2026-10-20 03:25:09.111: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-10-20 03:25:09.111: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-10-20 03:25:09.111: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 03:26:10.556: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 03:35:00.504: [INFO] CurrentProfilePath: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 03:35:00.504: [INFO] Profiles total count: 1
+2026-10-20 03:35:00.504: [INFO] Profile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T03:25:51.508Z
+2026-10-20 03:35:00.504: [INFO] LastUsedProfileDir: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 03:35:00.504: [INFO] MostRecentlyActiveProfile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T03:25:51.508Z
+2026-10-20 03:35:00.504: [INFO] VisibilityChanged: 0
+2026-10-20 03:35:00.624: [INFO] OnDoneLoading sync enabled: 0
+2026-10-20 03:35:00.624: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-10-20 03:35:00.624: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-10-20 03:35:00.624: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 03:36:00.632: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 03:40:12.097: [INFO] CurrentProfilePath: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 03:40:12.098: [INFO] Profiles total count: 1
+2026-10-20 03:40:12.098: [INFO] Profile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T03:35:00.558Z
+2026-10-20 03:40:12.098: [INFO] LastUsedProfileDir: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 03:40:12.098: [INFO] MostRecentlyActiveProfile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T03:35:00.558Z
+2026-10-20 03:40:12.098: [INFO] VisibilityChanged: 0
+2026-10-20 03:40:12.218: [INFO] OnDoneLoading sync enabled: 0
+2026-10-20 03:40:12.218: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-10-20 03:40:12.218: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-10-20 03:40:12.218: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 03:40:44.412: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 03:43:05.088: [INFO] CurrentProfilePath: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 03:43:05.088: [INFO] Profiles total count: 1
+2026-10-20 03:43:05.088: [INFO] Profile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T03:40:12.165Z
+2026-10-20 03:43:05.088: [INFO] LastUsedProfileDir: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 03:43:05.088: [INFO] MostRecentlyActiveProfile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T03:40:12.165Z
+2026-10-20 03:43:05.088: [INFO] VisibilityChanged: 0
+2026-10-20 03:43:05.194: [INFO] OnDoneLoading sync enabled: 0
+2026-10-20 03:43:05.194: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-10-20 03:43:05.194: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-10-20 03:43:05.194: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 03:43:40.369: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 03:47:57.103: [INFO] CurrentProfilePath: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 03:47:57.103: [INFO] Profiles total count: 1
+2026-10-20 03:47:57.103: [INFO] Profile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T03:43:05.148Z
+2026-10-20 03:47:57.103: [INFO] LastUsedProfileDir: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 03:47:57.103: [INFO] MostRecentlyActiveProfile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T03:43:05.148Z
+2026-10-20 03:47:57.103: [INFO] VisibilityChanged: 0
+2026-10-20 03:47:57.211: [INFO] OnDoneLoading sync enabled: 0
+2026-10-20 03:47:57.211: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-10-20 03:47:57.211: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-10-20 03:47:57.211: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 03:48:05.764: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 03:50:05.823: [INFO] CurrentProfilePath: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 03:50:05.823: [INFO] Profiles total count: 1
+2026-10-20 03:50:05.823: [INFO] Profile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T03:47:57.160Z
+2026-10-20 03:50:05.823: [INFO] LastUsedProfileDir: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 03:50:05.823: [INFO] MostRecentlyActiveProfile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T03:47:57.160Z
+2026-10-20 03:50:05.823: [INFO] VisibilityChanged: 0
+2026-10-20 03:50:05.935: [INFO] OnDoneLoading sync enabled: 0
+2026-10-20 03:50:05.935: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-10-20 03:50:05.935: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-10-20 03:50:05.935: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 03:50:35.831: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 04:12:21.550: [INFO] CurrentProfilePath: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 04:12:21.550: [INFO] Profiles total count: 1
+2026-10-20 04:12:21.550: [INFO] Profile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T04:04:07.279Z
+2026-10-20 04:12:21.550: [INFO] LastUsedProfileDir: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 04:12:21.550: [INFO] MostRecentlyActiveProfile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T04:04:07.279Z
+2026-10-20 04:12:21.550: [INFO] VisibilityChanged: 0
+2026-10-20 04:12:21.651: [INFO] OnDoneLoading sync enabled: 0
+2026-10-20 04:12:21.651: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-10-20 04:12:21.651: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-10-20 04:12:21.651: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 04:13:09.903: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 04:15:26.643: [INFO] CurrentProfilePath: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 04:15:26.643: [INFO] Profiles total count: 1
+2026-10-20 04:15:26.643: [INFO] Profile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T04:12:47.362Z
+2026-10-20 04:15:26.643: [INFO] LastUsedProfileDir: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 04:15:26.643: [INFO] MostRecentlyActiveProfile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T04:12:47.362Z
+2026-10-20 04:15:26.643: [INFO] VisibilityChanged: 0
+2026-10-20 04:15:26.761: [INFO] OnDoneLoading sync enabled: 0
+2026-10-20 04:15:26.761: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-10-20 04:15:26.761: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-10-20 04:15:26.761: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 04:16:12.049: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 04:16:39.056: [INFO] CurrentProfilePath: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 04:16:39.056: [INFO] Profiles total count: 1
+2026-10-20 04:16:39.057: [INFO] Profile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T04:15:43.466Z
+2026-10-20 04:16:39.057: [INFO] LastUsedProfileDir: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 04:16:39.057: [INFO] MostRecentlyActiveProfile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T04:15:43.466Z
+2026-10-20 04:16:39.057: [INFO] VisibilityChanged: 0
+2026-10-20 04:16:39.162: [INFO] OnDoneLoading sync enabled: 0
+2026-10-20 04:16:39.162: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-10-20 04:16:39.162: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-10-20 04:16:39.162: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 04:17:33.363: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 04:20:45.668: [INFO] CurrentProfilePath: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 04:20:45.668: [INFO] Profiles total count: 1
+2026-10-20 04:20:45.668: [INFO] Profile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T04:16:39.117Z
+2026-10-20 04:20:45.668: [INFO] LastUsedProfileDir: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 04:20:45.668: [INFO] MostRecentlyActiveProfile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T04:16:39.117Z
+2026-10-20 04:20:45.668: [INFO] VisibilityChanged: 0
+2026-10-20 04:20:45.780: [INFO] OnDoneLoading sync enabled: 0
+2026-10-20 04:20:45.780: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-10-20 04:20:45.780: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-10-20 04:20:45.780: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 04:21:47.904: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 04:26:28.390: [INFO] CurrentProfilePath: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 04:26:28.390: [INFO] Profiles total count: 1
+2026-10-20 04:26:28.390: [INFO] Profile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T04:20:45.731Z
+2026-10-20 04:26:28.390: [INFO] LastUsedProfileDir: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 04:26:28.390: [INFO] MostRecentlyActiveProfile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T04:20:45.731Z
+2026-10-20 04:26:28.390: [INFO] VisibilityChanged: 0
+2026-10-20 04:26:28.494: [INFO] OnDoneLoading sync enabled: 0
+2026-10-20 04:26:28.494: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-10-20 04:26:28.494: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-10-20 04:26:28.494: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 04:27:28.883: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 04:29:25.757: [INFO] CurrentProfilePath: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 04:29:25.757: [INFO] Profiles total count: 1
+2026-10-20 04:29:25.757: [INFO] Profile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T04:26:28.453Z
+2026-10-20 04:29:25.757: [INFO] LastUsedProfileDir: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 04:29:25.757: [INFO] MostRecentlyActiveProfile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T04:26:28.453Z
+2026-10-20 04:29:25.757: [INFO] VisibilityChanged: 0
+2026-10-20 04:29:25.865: [INFO] OnDoneLoading sync enabled: 0
+2026-10-20 04:29:25.865: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-10-20 04:29:25.865: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-10-20 04:29:25.865: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 04:30:21.260: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 04:45:45.589: [INFO] CurrentProfilePath: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 04:45:45.589: [INFO] Profiles total count: 1
+2026-10-20 04:45:45.589: [INFO] Profile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T04:29:25.818Z
+2026-10-20 04:45:45.589: [INFO] LastUsedProfileDir: C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default
+2026-10-20 04:45:45.589: [INFO] MostRecentlyActiveProfile: name=Personal path=C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default lastActive=2026-10-20T04:29:25.818Z
+2026-10-20 04:45:45.589: [INFO] VisibilityChanged: 0
+2026-10-20 04:45:45.646: [INFO] OnDoneLoading sync enabled: 0
+2026-10-20 04:45:45.646: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-10-20 04:45:45.646: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-10-20 04:45:45.646: [INFO] BookmarksSnapshot Startup total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-10-20 04:46:25.748: [INFO] BookmarksSnapshot Shutdown total=0 bar=0 other=0 mobile=0 showBar=0 showBarNTP=1

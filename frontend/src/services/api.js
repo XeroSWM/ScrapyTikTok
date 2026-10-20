@@ -12,12 +12,31 @@ export const fetchSystemInfo = async () => {
   }
 };
 
-export const connectScraperSocket = ({ username, target, onLog, onResult, onError }) => {
+export const connectScraperSocket = ({
+  username,
+  target,
+  max_videos = 19,
+  max_comment_videos = 2,
+  max_following = 20,
+  max_followers = 20,
+  onLog,
+  onResult,
+  onError
+}) => {
   const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
   const socket = new WebSocket(`${protocol}//${getBackendHost()}:8000/ws/scrape`);
 
   socket.onopen = () => {
-    socket.send(JSON.stringify({ username, target }));
+    socket.send(
+      JSON.stringify({
+        username,
+        target,
+        max_videos: Number(max_videos),
+        max_comment_videos: Number(max_comment_videos),
+        max_following: Number(max_following),
+        max_followers: Number(max_followers)
+      })
+    );
   };
 
   socket.onmessage = (event) => {

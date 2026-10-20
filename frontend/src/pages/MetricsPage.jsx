@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { 
   Download, Video, MessageSquare, Hash, Search, 
   LayoutGrid, List, CheckCircle2, TrendingUp, Heart, 
-  Users, Eye, Clock, Share2, Sparkles, Filter, UserCheck, ExternalLink
+  Users, Eye, Clock, Share2, Sparkles, Filter, UserCheck, ExternalLink, Activity
 } from "lucide-react";
 import StatsCards from "../components/StatsCards";
 
 export default function MetricsPage({ data }) {
-  // Pestañas disponibles: "videos" | "comments" | "network" | "hashtags"
   const [internalTab, setInternalTab] = useState("videos");
   const [searchFilter, setSearchFilter] = useState("");
-  const [viewMode, setViewMode] = useState("grid"); // "grid" | "list"
-  const [networkSubTab, setNetworkSubTab] = useState("followers"); // "followers" | "following"
+  const [viewMode, setViewMode] = useState("grid");
+  const [networkSubTab, setNetworkSubTab] = useState("followers");
 
   const profile = data?.profile;
   const videos = data?.videos || [];
@@ -19,17 +18,99 @@ export default function MetricsPage({ data }) {
   const followersList = data?.followers_list || [];
   const followingList = data?.following_list || [];
 
+  // ==========================================
+  // 1. EXTRACCIÓN Y CONTEO DINÁMICO DE HASHTAGS
+  // ==========================================
+  const detectedHashtags = useMemo(() => {
+    const counts = {};
+    const extractTags = (text) => {
+      if (!text) return;
+      const matches = text.match(/#[\w\u00f1\u00d1_]+/gi);
+      if (matches) {
+        matches.forEach((tag) => {
+          const cleanTag = tag.toLowerCase();
+          counts[cleanTag] = (counts[cleanTag] || 0) + 1;
+        });
+      }
+    };
+
+    // Extraer de la biografía del perfil
+    extractTags(profile?.bio);
+
+    // Extraer de la descripción de cada video
+    videos.forEach((v) => {
+      extractTags(v.desc);
+    });
+
+    // Extraer también de comentarios si contienen hashtags relevantes
+    comments.forEach((c) => {
+      extractTags(c.text);
+    });
+
+    // Ordenar de mayor a menor uso
+    const sortedTags = Object.entries(counts)
+      .sort((a, b) => b[1] - a[1])
+      .map(([tag, count]) => ({ tag, count }));
+
+    return sortedTags;
+  }, [profile, videos, comments]);
+
+  // ==========================================
+  // 2. CÁLCULO DINÁMICO DE FRECUENCIA
+  // ==========================================
+  const publicationFrequency = useMemo(() => {
+    // Si tenemos timestamps de creación reales
+    const timestamps = videos
+      .map((v) => Number(v.create_time))
+      .filter((t) => t > 0)
+      .sort((a, b) => b - a);
+
+    if (timestamps.length >= 2) {
+      const diffsInDays = [];
+      for (let i = 0; i < timestamps.length - 1; i++) {
+        const diffDays = (timestamps[i] - timestamps[i + 1]) / (1000 * 60 * 60 * 24);
+        if (diffDays >= 0) diffsInDays.push(diffDays);
+      }
+
+      if (diffsInDays.length > 0) {
+        const avgDays = diffsInDays.reduce((a, b) => a + b, 0) / diffsInDays.length;
+        if (avgDays <= 1.5) {
+          return { label: "Muy Alta", desc: "Publica casi a diario (≤ 1-2 días)", color: "text-emerald-400" };
+        } else if (avgDays <= 4) {
+          return { label: "Frecuente", desc: "Publica cada 2-4 días", color: "text-cyan-400" };
+        } else if (avgDays <= 8) {
+          return { label: "Semanal", desc: "Aprox. 1 video por semana", color: "text-indigo-400" };
+        } else {
+          return { label: "Esporádica", desc: "Intervalos mayores a 10 días", color: "text-amber-400" };
+        }
+      }
+    }
+
+    // Estimación secundaria basada en la densidad de videos del feed
+    const count = videos.length;
+    if (count >= 15) {
+      return { label: "Alta", desc: "Gran volumen de publicaciones recientes", color: "text-emerald-400" };
+    } else if (count >= 6) {
+      return { label: "Moderada", desc: "Ritmo de publicación activo y constante", color: "text-cyan-400" };
+    } else if (count > 0) {
+      return { label: "Pausada", desc: "Poca actividad detectada en la muestra actual", color: "text-amber-400" };
+    }
+
+    return { label: "Sin Datos", desc: "No hay videos suficientes para calcular el ritmo", color: "text-slate-500" };
+  }, [videos]);
+
   // Filtrado reactivo de videos
   const filteredVideos = videos.filter((v) => {
     if (!searchFilter.trim()) return true;
     const term = searchFilter.toLowerCase();
     return (
       (v.url && v.url.toLowerCase().includes(term)) ||
+      (v.desc && v.desc.toLowerCase().includes(term)) ||
       (v.views && v.views.toLowerCase().includes(term))
     );
   });
 
-  // Filtrado reactivo de comentarios (soporta author y user)
+  // Filtrado reactivo de comentarios
   const filteredComments = comments.filter((c) => {
     if (!searchFilter.trim()) return true;
     const term = searchFilter.toLowerCase();
@@ -149,14 +230,14 @@ export default function MetricsPage({ data }) {
         <div className="flex items-center gap-2.5 shrink-0">
           <button
             onClick={downloadCSV}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-850 hover:border-slate-700 text-slate-200 text-xs font-semibold transition"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-850 hover:border-slate-700 text-slate-200 text-xs font-semibold transition cursor-pointer"
           >
             <Download className="w-3.5 h-3.5 text-emerald-400" />
             <span>Exportar CSV</span>
           </button>
           <button
             onClick={downloadJSON}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white text-xs font-bold transition shadow-lg shadow-rose-950/40"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white text-xs font-bold transition shadow-lg shadow-rose-950/40 cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Exportar JSON</span>
@@ -226,7 +307,11 @@ export default function MetricsPage({ data }) {
                   : "text-slate-400 hover:text-white"
               }`}
             >
+              <Hash className="w-3.5 h-3.5" />
               <span>Hashtags & Estadísticas</span>
+              <span className="px-1.5 py-0.2 rounded-full bg-black/40 text-[10px]">
+                {detectedHashtags.length}
+              </span>
             </button>
           </div>
 
@@ -292,6 +377,11 @@ export default function MetricsPage({ data }) {
                     </span>
 
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-4">
+                      {vid.desc && (
+                        <p className="text-[11px] text-slate-300 line-clamp-2 mb-2 font-sans leading-tight">
+                          {vid.desc}
+                        </p>
+                      )}
                       <div className="flex items-center justify-between text-white">
                         <span className="text-xs font-bold flex items-center gap-1.5 font-mono">
                           <Eye className="w-3.5 h-3.5 text-cyan-400" /> {vid.views}
@@ -317,14 +407,14 @@ export default function MetricsPage({ data }) {
                     key={vid.id}
                     className="flex items-center justify-between p-3 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-slate-700 transition"
                   >
-                    <div className="flex items-center gap-3">
-                      <img src={vid.thumbnail} alt="" className="w-10 h-14 rounded-lg object-cover" />
-                      <div>
+                    <div className="flex items-center gap-3 min-w-0">
+                      <img src={vid.thumbnail} alt="" className="w-10 h-14 rounded-lg object-cover shrink-0" />
+                      <div className="min-w-0">
                         <p className="text-xs font-bold text-white">Video #{vid.id}</p>
-                        <p className="text-[11px] text-slate-500 font-mono truncate max-w-sm">{vid.url}</p>
+                        <p className="text-[11px] text-slate-400 truncate max-w-md">{vid.desc || vid.url}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4 text-xs font-mono">
+                    <div className="flex items-center gap-4 text-xs font-mono shrink-0">
                       <span className="text-cyan-400 font-bold">{vid.views} vistas</span>
                       <span className="text-slate-400">{vid.duration || "15s"}</span>
                       <a
@@ -350,7 +440,7 @@ export default function MetricsPage({ data }) {
               <div className="text-center py-12 space-y-2">
                 <MessageSquare className="w-8 h-8 text-slate-700 mx-auto" />
                 <p className="text-slate-500 text-xs font-mono">
-                  No hay comentarios extraídos. Asegúrate de haber seleccionado "Completo (Todo)" o "Comentarios" en la extracción.
+                  No hay comentarios extraídos.
                 </p>
               </div>
             ) : (
@@ -378,7 +468,7 @@ export default function MetricsPage({ data }) {
                       <div className="space-y-1 flex-1 min-w-0">
                         <div className="flex items-center flex-wrap gap-2">
                           <span className="text-xs font-mono font-bold text-cyan-400">
-                            @{authorUsername}
+                            @{authorUsername.replace(/^@/, '')}
                           </span>
                           {com.author_name && (
                             <span className="text-xs text-slate-400 font-medium">
@@ -426,7 +516,7 @@ export default function MetricsPage({ data }) {
           </div>
         )}
 
-        {/* ---------------- SUBTAB 3: COMUNIDAD & RED (SEGUIDORES / SEGUIDOS) ---------------- */}
+        {/* ---------------- SUBTAB 3: COMUNIDAD & RED ---------------- */}
         {internalTab === "network" && (
           <div className="space-y-4">
             <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
@@ -461,7 +551,7 @@ export default function MetricsPage({ data }) {
 
             {filteredNetwork.length === 0 ? (
               <p className="text-center py-12 text-slate-600 text-xs font-mono">
-                No se encontraron cuentas en esta lista. Asegúrate de ejecutar la extracción seleccionando "Todo" o la opción de red.
+                No se encontraron cuentas en esta lista.
               </p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
@@ -503,35 +593,70 @@ export default function MetricsPage({ data }) {
           </div>
         )}
 
-        {/* ---------------- SUBTAB 4: HASHTAGS & ESTADÍSTICAS ---------------- */}
+        {/* ---------------- SUBTAB 4: HASHTAGS & ESTADÍSTICAS REALES ---------------- */}
         {internalTab === "hashtags" && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            
+            {/* Tarjeta 1: Hashtags reales extraídos */}
             <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
-              <span className="text-xs font-bold text-slate-400 flex items-center gap-1.5">
-                <Hash className="w-3.5 h-3.5 text-cyan-400" /> Hashtags Detectados
+              <span className="text-xs font-bold text-slate-400 flex items-center justify-between">
+                <span className="flex items-center gap-1.5">
+                  <Hash className="w-3.5 h-3.5 text-cyan-400" /> Hashtags Detectados
+                </span>
+                <span className="text-[10px] font-mono text-slate-500">
+                  {detectedHashtags.length} únicos
+                </span>
               </span>
-              <div className="flex flex-wrap gap-2">
-                {["#comedy", "#viral", "#fyp", "#foryou", "#parati"].map((tag) => (
-                  <span key={tag} className="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono text-cyan-300">
-                    {tag}
-                  </span>
-                ))}
-              </div>
+
+              {detectedHashtags.length === 0 ? (
+                <p className="text-slate-600 text-xs font-mono py-4 text-center">
+                  No se detectaron hashtags en los textos ni en la biografía.
+                </p>
+              ) : (
+                <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto pr-1">
+                  {detectedHashtags.map(({ tag, count }) => (
+                    <span 
+                      key={tag} 
+                      className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs font-mono text-cyan-300 hover:border-cyan-500/50 transition"
+                    >
+                      <span>{tag}</span>
+                      {count > 1 && (
+                        <span className="text-[10px] text-slate-500 bg-black/40 px-1 rounded">
+                          x{count}
+                        </span>
+                      )}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
+            {/* Tarjeta 2: Tasa de interacción real */}
             <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-              <span className="text-xs font-bold text-slate-400">Promedio de Interacciones</span>
-              <p className="text-2xl font-black text-rose-400">
-                {profile?.engagement !== "N/A" ? profile?.engagement : "6.22%"}
+              <span className="text-xs font-bold text-slate-400 flex items-center gap-1.5">
+                <Activity className="w-3.5 h-3.5 text-rose-400" /> Promedio de Interacciones
+              </span>
+              <p className="text-3xl font-black text-rose-400">
+                {profile?.engagement && profile.engagement !== "N/A" ? profile.engagement : "0%"}
               </p>
-              <p className="text-[11px] text-slate-500">Estimación basada en la muestra actual extraída.</p>
+              <p className="text-[11px] text-slate-500">
+                Calculado sobre las vistas, likes y comentarios de los {videos.length} videos extraídos.
+              </p>
             </div>
 
+            {/* Tarjeta 3: Frecuencia calculada dinámicamente */}
             <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-              <span className="text-xs font-bold text-slate-400">Frecuencia de Publicación</span>
-              <p className="text-2xl font-black text-emerald-400">Regular</p>
-              <p className="text-[11px] text-slate-500">Intervalo detectado entre los últimos posts analizados.</p>
+              <span className="text-xs font-bold text-slate-400 flex items-center gap-1.5">
+                <TrendingUp className="w-3.5 h-3.5 text-emerald-400" /> Frecuencia de Publicación
+              </span>
+              <p className={`text-3xl font-black ${publicationFrequency.color}`}>
+                {publicationFrequency.label}
+              </p>
+              <p className="text-[11px] text-slate-500">
+                {publicationFrequency.desc}
+              </p>
             </div>
+
           </div>
         )}
       </div>

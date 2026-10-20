@@ -1,6 +1,6 @@
-2026/10/19-16:29:36.200 59c0 Reusing MANIFEST C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
-2026/10/19-16:29:36.205 59c0 Recovering log #36
-2026/10/19-16:29:36.206 59c0 Reusing old log C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default\EdgeCoupons/coupons_data.db/000036.log 
-2026/10/19-16:29:36.255 2ffc Level-0 table #40: started
-2026/10/19-16:29:36.265 2ffc Level-0 table #40: 683467 bytes OK
-2026/10/19-16:29:36.271 2ffc Delete type=0 #36
+2026/10/19-23:45:55.662 52e4 Reusing MANIFEST C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/10/19-23:45:55.663 52e4 Recovering log #78
+2026/10/19-23:45:55.664 52e4 Reusing old log C:\Users\ASUS RYZEN 7\Documents\GitHub\ScrapyTikTok\backend\tiktok_edge_profile\Default\EdgeCoupons/coupons_data.db/000078.log 
+2026/10/19-23:45:55.731 4de0 Level-0 table #82: started
+2026/10/19-23:45:55.734 4de0 Level-0 table #82: 683444 bytes OK
+2026/10/19-23:45:55.736 4de0 Delete type=0 #78
