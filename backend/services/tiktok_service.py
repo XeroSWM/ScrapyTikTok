@@ -104,6 +104,9 @@ class TikTokScraperService:
             "url": f"https://www.tiktok.com/@{clean_user}/video/{vid_id}",
             "thumbnail": cover,
             "views": self._format_number(plays),
+            "likes": self._format_number(likes),
+            "shares": self._format_number(shares),
+            "comments_count": self._format_number(comments),
             "duration": f"{v_info.get('duration', 15)}s",
             "desc": item.get("desc", ""),
             "create_time": item.get("createTime", 0),
@@ -154,7 +157,7 @@ class TikTokScraperService:
             nonlocal current_inspecting_vid, active_phase
             req_url = response.url
 
-            # 1. Videos
+            # 1. Videos (Intercepta respuestas de catálogo con estadísticas completas)
             if "/api/post/item_list" in req_url:
                 try:
                     text_body = response.text()
@@ -167,7 +170,7 @@ class TikTokScraperService:
                 except Exception:
                     pass
 
-            # 2. Comentarios (Intercepta llamadas de red al abrir el modal de video)
+            # 2. Comentarios (Intercepta llamadas al abrir el modal de video)
             if "/api/comment/list" in req_url or "comment/list" in req_url:
                 try:
                     text_body = response.text()
@@ -323,6 +326,9 @@ class TikTokScraperService:
                         "url": d["url"],
                         "thumbnail": d["thumbnail"],
                         "views": d["views"],
+                        "likes": "0",
+                        "shares": "0",
+                        "comments_count": "0",
                         "duration": "15s",
                         "desc": d.get("desc", ""),
                         "create_time": 0,
@@ -505,7 +511,7 @@ class TikTokScraperService:
 
             context.close()
 
-        # Consolidar resultados finales con descripción y fecha para métricas reales
+        # Consolidar resultados finales con descripción, fecha, likes y shares individuales
         final_videos = list(captured_map.values())[:max_videos]
         total_plays = sum(v.get("raw_plays", 0) for v in final_videos)
         total_interactions = sum(v.get("raw_interactions", 0) for v in final_videos)
@@ -516,6 +522,9 @@ class TikTokScraperService:
                 "url": vid["url"],
                 "thumbnail": vid["thumbnail"],
                 "views": vid["views"],
+                "likes": vid.get("likes", "0"),
+                "shares": vid.get("shares", "0"),
+                "comments_count": vid.get("comments_count", "0"),
                 "duration": vid["duration"],
                 "desc": vid.get("desc", ""),
                 "create_time": vid.get("create_time", 0)

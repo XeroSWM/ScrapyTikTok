@@ -34,20 +34,16 @@ export default function MetricsPage({ data }) {
       }
     };
 
-    // Extraer de la biografía del perfil
     extractTags(profile?.bio);
 
-    // Extraer de la descripción de cada video
     videos.forEach((v) => {
       extractTags(v.desc);
     });
 
-    // Extraer también de comentarios si contienen hashtags relevantes
     comments.forEach((c) => {
       extractTags(c.text);
     });
 
-    // Ordenar de mayor a menor uso
     const sortedTags = Object.entries(counts)
       .sort((a, b) => b[1] - a[1])
       .map(([tag, count]) => ({ tag, count }));
@@ -59,7 +55,6 @@ export default function MetricsPage({ data }) {
   // 2. CÁLCULO DINÁMICO DE FRECUENCIA
   // ==========================================
   const publicationFrequency = useMemo(() => {
-    // Si tenemos timestamps de creación reales
     const timestamps = videos
       .map((v) => Number(v.create_time))
       .filter((t) => t > 0)
@@ -86,7 +81,6 @@ export default function MetricsPage({ data }) {
       }
     }
 
-    // Estimación secundaria basada en la densidad de videos del feed
     const count = videos.length;
     if (count >= 15) {
       return { label: "Alta", desc: "Gran volumen de publicaciones recientes", color: "text-emerald-400" };
@@ -141,27 +135,28 @@ export default function MetricsPage({ data }) {
     link.click();
   };
 
-  // Exportar a CSV
+  // Exportar a CSV con Vistas, Likes y Compartidos
   const downloadCSV = () => {
     if (!data) return;
-    let csv = "data:text/csv;charset=utf-8,Tipo,ID,Referencia_Video,Usuario,Texto_O_Metrica,Likes\n";
+    let csv = "data:text/csv;charset=utf-8,Tipo,ID,Referencia_Video,Usuario,Vistas,Likes,Compartidos,Texto\n";
     
     videos.forEach((v) => {
-      csv += `Video,${v.id},${v.url},-,${v.views},-\n`;
+      const safeDesc = (v.desc || "").replace(/"/g, '""');
+      csv += `Video,${v.id},${v.url},-,${v.views},${v.likes || "0"},${v.shares || "0"},"${safeDesc}"\n`;
     });
     
     comments.forEach((c) => {
       const safeText = (c.text || "").replace(/"/g, '""');
       const safeUser = c.author || c.user || "anonimo";
-      csv += `Comentario,${c.id},${c.video_url || c.video_id || "-"},${safeUser},"${safeText}",${c.likes || 0}\n`;
+      csv += `Comentario,${c.id},${c.video_url || c.video_id || "-"},${safeUser},-,${c.likes || 0},-, "${safeText}"\n`;
     });
 
     followersList.forEach((f) => {
-      csv += `Seguidor,-,-,${f.username},"${(f.name || "").replace(/"/g, '""')}",-\n`;
+      csv += `Seguidor,-,-,${f.username},-,-,-,"${(f.name || "").replace(/"/g, '""')}"\n`;
     });
 
     followingList.forEach((f) => {
-      csv += `Seguido,-,-,${f.username},"${(f.name || "").replace(/"/g, '""')}",-\n`;
+      csv += `Seguido,-,-,${f.username},-,-,-,"${(f.name || "").replace(/"/g, '""')}"\n`;
     });
 
     const uri = encodeURI(csv);
@@ -376,21 +371,32 @@ export default function MetricsPage({ data }) {
                       {vid.duration || "15s"}
                     </span>
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-4">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent flex flex-col justify-end p-3">
                       {vid.desc && (
                         <p className="text-[11px] text-slate-300 line-clamp-2 mb-2 font-sans leading-tight">
                           {vid.desc}
                         </p>
                       )}
-                      <div className="flex items-center justify-between text-white">
-                        <span className="text-xs font-bold flex items-center gap-1.5 font-mono">
-                          <Eye className="w-3.5 h-3.5 text-cyan-400" /> {vid.views}
+                      
+                      {/* Barra de métricas: Vistas, Likes y Compartidos */}
+                      <div className="flex items-center justify-between text-white border-t border-white/10 pt-2 text-[11px] font-mono">
+                        <span className="flex items-center gap-1 text-cyan-400" title="Vistas">
+                          <Eye className="w-3 h-3" /> {vid.views}
                         </span>
+
+                        <span className="flex items-center gap-1 text-rose-400" title="Me gusta">
+                          <Heart className="w-3 h-3 fill-rose-500/30" /> {vid.likes || "0"}
+                        </span>
+
+                        <span className="flex items-center gap-1 text-emerald-400" title="Compartidos">
+                          <Share2 className="w-3 h-3" /> {vid.shares || "0"}
+                        </span>
+
                         <a
                           href={vid.url}
                           target="_blank"
                           rel="noreferrer"
-                          className="p-1 rounded bg-white/10 hover:bg-rose-500 text-white transition"
+                          className="p-1 rounded bg-white/10 hover:bg-rose-500 text-white transition ml-0.5"
                           title="Abrir en TikTok"
                         >
                           <Video className="w-3 h-3" />
@@ -415,7 +421,15 @@ export default function MetricsPage({ data }) {
                       </div>
                     </div>
                     <div className="flex items-center gap-4 text-xs font-mono shrink-0">
-                      <span className="text-cyan-400 font-bold">{vid.views} vistas</span>
+                      <span className="flex items-center gap-1 text-cyan-400 font-bold" title="Vistas">
+                        <Eye className="w-3 h-3" /> {vid.views}
+                      </span>
+                      <span className="flex items-center gap-1 text-rose-400 font-bold" title="Me gusta">
+                        <Heart className="w-3 h-3 fill-rose-500/30" /> {vid.likes || "0"}
+                      </span>
+                      <span className="flex items-center gap-1 text-emerald-400 font-bold" title="Compartidos">
+                        <Share2 className="w-3 h-3" /> {vid.shares || "0"}
+                      </span>
                       <span className="text-slate-400">{vid.duration || "15s"}</span>
                       <a
                         href={vid.url}
