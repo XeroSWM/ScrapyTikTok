@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from utils.network import get_local_ip
 from services.tiktok_service import TikTokScraperService
 from services.psychometric_service import BigFiveEmbeddingService
+from services.gemini_service import GeminiAuditService
 
 app = FastAPI(title="TikTok Scraper & AI Backend API")
 
@@ -124,6 +125,28 @@ async def websocket_scrape_endpoint(websocket: WebSocket):
             await websocket.close()
         except Exception:
             pass
+        
+gemini_service = None
+try:
+    gemini_service = GeminiAuditService()
+except Exception as e:
+    print(f"[WARN] Gemini no inicializado: {e}")
+
+class GeminiReportRequest(BaseModel):
+    profile: dict
+    psychometrics: dict
+    frequency: str = "Moderada"
+
+@app.post("/api/ai/gemini-report")
+def get_gemini_report_endpoint(payload: GeminiReportRequest):
+    if not gemini_service:
+        return {"error": "Servicio de Gemini no configurado en el servidor"}
+    
+    return gemini_service.generate_creator_report(
+        profile=payload.profile,
+        psychometrics=payload.psychometrics,
+        frequency=payload.frequency
+    )
 
 if __name__ == "__main__":
     import uvicorn

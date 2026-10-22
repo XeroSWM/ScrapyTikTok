@@ -39,3 +39,6 @@ dist/
 
 auth.json
 **/auth.json
+
+.env
+.env.*

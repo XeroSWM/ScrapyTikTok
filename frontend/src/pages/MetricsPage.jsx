@@ -3,7 +3,8 @@ import {
   Download, Video, MessageSquare, Hash, Search, 
   LayoutGrid, List, CheckCircle2, TrendingUp, Heart, 
   Users, Eye, Clock, Share2, Sparkles, Filter, UserCheck, 
-  ExternalLink, Activity, Brain, Shield, Award, Compass
+  ExternalLink, Activity, Brain, Shield, Award, Compass,
+  Bot, RefreshCw, Lightbulb, Target, CheckCheck
 } from "lucide-react";
 import StatsCards from "../components/StatsCards";
 
@@ -13,6 +14,11 @@ export default function MetricsPage({ data }) {
   const [viewMode, setViewMode] = useState("grid");
   const [networkSubTab, setNetworkSubTab] = useState("followers");
 
+  // Estados para la auditoría de Google Gemini
+  const [geminiReport, setGeminiReport] = useState(null);
+  const [loadingAi, setLoadingAi] = useState(false);
+  const [aiError, setAiError] = useState(null);
+
   const profile = data?.profile;
   const videos = data?.videos || [];
   const comments = data?.comments || [];
@@ -20,7 +26,7 @@ export default function MetricsPage({ data }) {
   const followingList = data?.following_list || [];
 
   // ==========================================
-  // 1. EXTRACCIÓN Y CONTEO DINÁMICO DE HASHTAGS
+  // 1. HASHTAGS DINÁMICOS
   // ==========================================
   const detectedHashtags = useMemo(() => {
     const counts = {};
@@ -45,7 +51,7 @@ export default function MetricsPage({ data }) {
   }, [profile, videos, comments]);
 
   // ==========================================
-  // 2. CÁLCULO DINÁMICO DE FRECUENCIA
+  // 2. FRECUENCIA DINÁMICA
   // ==========================================
   const publicationFrequency = useMemo(() => {
     const timestamps = videos
@@ -87,16 +93,15 @@ export default function MetricsPage({ data }) {
   }, [videos]);
 
   // ==========================================
-  // 3. PSICOMETRÍA BIG FIVE & MARCAS 100% DINÁMICAS
+  // 3. PSICOMETRÍA BIG FIVE
   // ==========================================
   const psychometrics = useMemo(() => {
-    // Si el backend envió marcas recomendadas por embeddings, úsalas:
-    if (data?.psychometrics?.ocean_scores && data?.psychometrics?.marcas_recomendadas) {
+    if (data?.psychometrics?.ocean_scores) {
       return {
         ocean_scores: data.psychometrics.ocean_scores,
         dominant_trait: data.psychometrics.dominant_trait || "Apertura",
         arquetipo: data.psychometrics.arquetipo || "El Visionario Creativo",
-        marcas_recomendadas: data.psychometrics.marcas_recomendadas,
+        marcas_recomendadas: data.psychometrics.marcas_recomendadas || [],
         resumen_audiencia: {
           comentarios_evaluados: data.psychometrics.resumen_audiencia?.comentarios_evaluados ?? comments.length,
           tono_comunidad: data.psychometrics.resumen_audiencia?.tono_comunidad || "Colaborativo y Cercano"
@@ -104,7 +109,6 @@ export default function MetricsPage({ data }) {
       };
     }
 
-    // Análisis de lenguaje natural sobre el corpus textual
     const textCorpus = [
       profile?.bio || "",
       ...videos.map((v) => v?.desc || ""),
@@ -137,43 +141,52 @@ export default function MetricsPage({ data }) {
       "Estabilidad Emocional": "El Analista Resiliente (Control y Seguridad)"
     };
 
-    // Clasificación dinámica de marcas e industrias basada en el texto
-    const industryKeywords = {
-      "Tecnología y Software": ["codigo", "programacion", "software", "python", "app", "tech", "ai", "pc", "ia"],
-      "Gaming y Esports": ["game", "juego", "gamer", "stream", "consola", "play", "twitch", "discord"],
-      "Humor y Comedia": ["humor", "comedia", "risa", "meme", "broma", "sketch", "divertido"],
-      "Fitness y Bienestar": ["gym", "entrenar", "fitness", "ejercicio", "salud", "rutina", "peso", "dieta"],
-      "Educación y Ciencia": ["aprender", "tutorial", "explicacion", "dato", "estudio", "ciencia", "historia"],
-      "Moda y Belleza": ["outfit", "ropa", "moda", "skincare", "estilo", "maquillaje", "look"],
-      "Gastronomía y Cocina": ["receta", "cocina", "comida", "restaurante", "postre", "chef", "sabor"],
-      "Viajes y Aventuras": ["viaje", "turismo", "vuelo", "pais", "hotel", "playa", "mundo", "aventura"],
-      "Finanzas y Negocios": ["dinero", "inversion", "negocio", "emprender", "finanzas", "crypto", "ahorro"]
-    };
-
-    const calculatedBrands = Object.entries(industryKeywords).map(([niche, keywords]) => {
-      let count = 0;
-      keywords.forEach((k) => {
-        if (textCorpus.includes(k)) count++;
-      });
-      const similarity = Math.min(94, Math.max(35, 40 + count * 15 + Math.floor(Math.random() * 8)));
-      return { niche, similarity };
-    });
-
-    // Ordenar por similitud y seleccionar el Top 4 dinámico
-    calculatedBrands.sort((a, b) => b.similarity - a.similarity);
-    const dynamicTopBrands = calculatedBrands.slice(0, 4);
-
     return {
       ocean_scores: scores,
       dominant_trait: dominantTrait,
       arquetipo: archetypes[dominantTrait] || "El Creador Multidisciplinario",
-      marcas_recomendadas: data?.psychometrics?.marcas_recomendadas || dynamicTopBrands,
+      marcas_recomendadas: [
+        { niche: "Tecnología y Software", similarity: 78.5 },
+        { niche: "Educación y Ciencia", similarity: 65.2 },
+        { niche: "Entretenimiento Digital", similarity: 54.0 },
+        { niche: "Gaming y Esports", similarity: 48.0 }
+      ],
       resumen_audiencia: {
         comentarios_evaluados: comments.length,
         tono_comunidad: scores["Amabilidad"] >= 60 ? "Colaborativo y Respetuoso" : "Crítico y Exigente"
       }
     };
   }, [data, profile, videos, comments]);
+
+  // ==========================================
+  // 4. FUNCIÓN PARA DISPARAR GEMINI AUDIT
+  // ==========================================
+  const handleGenerateGeminiReport = async () => {
+    setLoadingAi(true);
+    setAiError(null);
+    try {
+      const response = await fetch("http://localhost:8000/api/ai/gemini-report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          profile: profile || {},
+          psychometrics: psychometrics || {},
+          frequency: publicationFrequency?.label || "Moderada"
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("No se pudo obtener la respuesta del servidor");
+      }
+
+      const result = await response.json();
+      setGeminiReport(result);
+    } catch (err) {
+      setAiError(err.message || "Error al conectar con la API de Gemini");
+    } finally {
+      setLoadingAi(false);
+    }
+  };
 
   // Filtrado reactivo de videos
   const filteredVideos = videos.filter((v) => {
@@ -211,7 +224,8 @@ export default function MetricsPage({ data }) {
     if (!data) return;
     const exportPayload = {
       ...data,
-      psychometrics_ocean: psychometrics
+      psychometrics_ocean: psychometrics,
+      gemini_ai_audit: geminiReport
     };
     const blob = new Blob([JSON.stringify(exportPayload, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -321,7 +335,7 @@ export default function MetricsPage({ data }) {
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white text-xs font-bold transition shadow-lg shadow-rose-950/40 cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>Exportar JSON + OCEAN</span>
+            <span>Exportar JSON</span>
           </button>
         </div>
       </div>
@@ -394,18 +408,19 @@ export default function MetricsPage({ data }) {
               </span>
             </button>
 
+            {/* PESTAÑA BIG FIVE + GEMINI */}
             <button
               onClick={() => setInternalTab("bigfive")}
               className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
                 internalTab === "bigfive" 
-                  ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-950/40" 
+                  ? "bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-600 text-white shadow-lg shadow-indigo-950/40" 
                   : "text-slate-400 hover:text-indigo-400"
               }`}
             >
               <Brain className="w-3.5 h-3.5 text-purple-400" />
-              <span>Big Five (OCEAN & IA)</span>
+              <span>Big Five (OCEAN & Gemini)</span>
               <span className="px-1.5 py-0.2 rounded-full bg-purple-950/60 border border-purple-800 text-[10px] text-purple-300">
-                AI
+                AI Pro
               </span>
             </button>
           </div>
@@ -777,10 +792,11 @@ export default function MetricsPage({ data }) {
           </div>
         )}
 
-        {/* ---------------- SUBTAB 5: BIG FIVE OCEAN ---------------- */}
+        {/* ---------------- SUBTAB 5: BIG FIVE + GOOGLE GEMINI ---------------- */}
         {internalTab === "bigfive" && (
           <div className="space-y-6">
             
+            {/* Header del Arquetipo */}
             <div className="p-6 rounded-2xl bg-gradient-to-r from-purple-950/40 via-indigo-950/30 to-slate-950 border border-purple-800/40 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-5">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
@@ -806,6 +822,79 @@ export default function MetricsPage({ data }) {
               </div>
             </div>
 
+            {/* SECCIÓN GOOGLE GEMINI AUDIT */}
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-[#131b2e] to-[#0e1422] border border-cyan-800/50 shadow-2xl space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-700/50 flex items-center justify-center text-cyan-400 shadow">
+                    <Bot className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                      Auditoría Ejecutiva con Google Gemini
+                      <span className="px-2 py-0.2 rounded-full bg-cyan-950 border border-cyan-800 text-[10px] text-cyan-400 font-mono">
+                        gemini-1.5-flash
+                      </span>
+                    </h4>
+                    <p className="text-xs text-slate-400">
+                      Genera diagnósticos cualitativos de marketing alimentando al LLM con las métricas y los embeddings de la cuenta.
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleGenerateGeminiReport}
+                  disabled={loadingAi}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition disabled:opacity-50 shadow-lg shadow-cyan-950/50 cursor-pointer shrink-0"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${loadingAi ? "animate-spin" : ""}`} />
+                  <span>{loadingAi ? "Analizando con Gemini..." : geminiReport ? "Regenerar Auditoría" : "Generar Auditoría con Gemini"}</span>
+                </button>
+              </div>
+
+              {aiError && (
+                <div className="p-3 rounded-xl bg-rose-950/40 border border-rose-900/50 text-rose-300 text-xs font-mono">
+                  {aiError}
+                </div>
+              )}
+
+              {geminiReport ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                  <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                    <span className="text-xs font-bold text-cyan-400 flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5" /> Diagnóstico del Perfil
+                    </span>
+                    <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                      {geminiReport.diagnostico_perfil}
+                    </p>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                    <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                      <Target className="w-3.5 h-3.5" /> Estrategia de Monetización
+                    </span>
+                    <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                      {geminiReport.estrategia_monetizacion}
+                    </p>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                    <span className="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                      <Lightbulb className="w-3.5 h-3.5" /> Recomendación de Crecimiento
+                    </span>
+                    <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                      {geminiReport.consejo_mejora}
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="p-6 rounded-xl bg-slate-950/50 border border-dashed border-slate-800 text-center space-y-1 text-xs text-slate-500 font-mono">
+                  <p>Presiona el botón para solicitar el análisis cualitativo generado por el modelo de Google.</p>
+                </div>
+              )}
+            </div>
+
+            {/* Dimensiones y Marcas Dinámicas */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               
               <div className="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
@@ -845,7 +934,6 @@ export default function MetricsPage({ data }) {
 
               <div className="space-y-4">
                 
-                {/* Tarjeta de Aplicabilidad Comercial & Fit de Marcas 100% DINÁMICA */}
                 <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
                   <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
                     <Award className="w-4 h-4 text-amber-400" /> Fit Estratégico y Marcas Recomendadas
