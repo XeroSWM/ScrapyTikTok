@@ -36,3 +36,6 @@ dist/
 
 **/tiktok_edge_profile/
 **/tiktok_edge_profile/**
+
+auth.json
+**/auth.json
