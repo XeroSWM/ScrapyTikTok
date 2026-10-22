@@ -33,3 +33,6 @@ __pycache__/
 node_modules/
 dist/
 .expo/
+
+**/tiktok_edge_profile/
+**/tiktok_edge_profile/**
