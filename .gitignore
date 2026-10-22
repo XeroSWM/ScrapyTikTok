@@ -42,3 +42,4 @@ auth.json
 
 .env
 .env.*
+/backend
