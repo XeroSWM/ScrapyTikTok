@@ -77,15 +77,31 @@ class BigFiveEmbeddingService:
 
         creator_vector = self.model.encode(creator_text).reshape(1, -1)
         
-        # Cálculo de los 5 grandes rasgos
-        scores = {}
+        # 1. Ponderación vectorial de cada rasgo
+        raw_weights = {}
         for trait, vecs in self.trait_vectors.items():
-            sim_high = cosine_similarity(creator_vector, vecs["high"].reshape(1, -1))[0][0]
-            sim_low = cosine_similarity(creator_vector, vecs["low"].reshape(1, -1))[0][0]
+            sim_high = float(cosine_similarity(creator_vector, vecs["high"].reshape(1, -1))[0][0])
+            sim_low = float(cosine_similarity(creator_vector, vecs["low"].reshape(1, -1))[0][0])
             
+            # Margen positivo de base para evitar ponderaciones negativas o nulas
             diff = sim_high - sim_low
-            normalized_score = int(np.clip(50 + (diff * 100), 10, 95))
-            scores[trait] = normalized_score
+            weight = max(0.05, 0.5 + diff)
+            raw_weights[trait] = weight
+
+        # 2. Normalización proporcional para sumar exactamente 100%
+        total_weight = sum(raw_weights.values())
+        scores = {}
+        cumulative = 0
+        traits_list = list(raw_weights.keys())
+
+        for idx, trait in enumerate(traits_list):
+            if idx == len(traits_list) - 1:
+                # El último rasgo absorbe el remanente por redondeo
+                scores[trait] = max(1, 100 - cumulative)
+            else:
+                pct = int(round((raw_weights[trait] / total_weight) * 100))
+                scores[trait] = pct
+                cumulative += pct
 
         dominant_trait = max(scores, key=scores.get)
 
@@ -96,10 +112,10 @@ class BigFiveEmbeddingService:
             "ocean_scores": scores,
             "dominant_trait": dominant_trait,
             "arquetipo": self._get_archetype(dominant_trait),
-            "marcas_recomendadas": recommended_niches, # <--- 100% DINÁMICO POR VECTORES
+            "marcas_recomendadas": recommended_niches,
             "resumen_audiencia": {
                 "comentarios_evaluados": len(audience_corpus),
-                "tono_comunidad": "Colaborativo y Cercano" if scores["Amabilidad"] >= 50 else "Crítico y Exigente"
+                "tono_comunidad": "Colaborativo y Cercano" if scores["Amabilidad"] >= 20 else "Crítico y Exigente"
             }
         }
 
@@ -108,7 +124,7 @@ class BigFiveEmbeddingService:
             "Apertura": "El Visionario Creativo (Innovación y Nuevas Ideas)",
             "Extraversión": "El Conector Social (Dinamismo y Entretenimiento)",
             "Responsabilidad": "El Experto Estructurado (Educación y Métodos)",
-            "Amabilidad": "El Constructor de Comunidad (Cercanía y Empatía)",
+            "Amabilidad": "El Constructor de Comunidad (Empatía y Cercanía)",
             "Estabilidad Emocional": "El Analista Resiliente (Pragmatismo y Control)"
         }
         return mapping.get(dominant, "Creador Multidisciplinario")
