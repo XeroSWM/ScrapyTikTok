@@ -318,7 +318,6 @@ python -m venv venv
 .\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 pip install sentence-transformers scikit-learn numpy google-genai
-playwright install chromium
 python main.py
 ```
 
@@ -367,7 +366,6 @@ El dispositivo movil y la computadora deben poder comunicarse por la misma red l
 | Comando | Resultado |
 |---|---|
 | `python main.py` | Inicia FastAPI en el puerto `8000` |
-| `playwright install chromium` | Instala Chromium para Playwright; el servicio usa el canal local `msedge` |
 
 ### Web
 
@@ -408,7 +406,7 @@ Los valores se pueden enviar al endpoint o al WebSocket. El resultado depende de
 - El servicio consolida vistas, likes, comentarios y compartidos de los videos.
 - Calcula vistas promedio y engagement cuando hay datos suficientes.
 - La web/movil presenta la frecuencia de publicacion por categorias.
-- La app movil cuenta hashtags de la biografia, descripciones de videos y comentarios disponibles.
+- Las interfaces web y movil cuentan hashtags de la biografia, descripciones de videos y comentarios disponibles.
 
 Estas metricas describen la muestra extraida y no necesariamente el historico completo de una cuenta.
 
