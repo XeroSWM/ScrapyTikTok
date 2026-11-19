@@ -1,5 +1,6 @@
 import asyncio
-from services.tiktok_service import TikTokScraperService
+
+from .tiktok_service import TikTokScraperService
 
 async def scrape_tiktok_profile(username: str, target: str = "all", log_callback=None):
     service = TikTokScraperService(log_callback=log_callback)
