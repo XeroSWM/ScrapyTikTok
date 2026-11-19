@@ -1,49 +1,76 @@
 
-import React, { useState, useEffect } from "react";
+
+import React, { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { Play, Radio, BarChart3 } from "lucide-react";
 import Navbar from "./components/Navbar";
 import ExtractorPage from "./pages/ExtractorPage";
-import LanAccessPage from "./pages/LanAccessPage";
-import MetricsPage from "./pages/MetricsPage";
 import { fetchSystemInfo, connectScraperSocket } from "./services/api";
 
+const LanAccessPage = lazy(() => import("./pages/LanAccessPage"));
+const MetricsPage = lazy(() => import("./pages/MetricsPage"));
+
 export default function App() {
-  const [activeTab, setActiveTab] = useState("extractor"); // "extractor" | "lan" | "metrics"
+  const [activeTab, setActiveTab] = useState("extractor");
   const [lanIp, setLanIp] = useState("192.168.1.15");
   const [lanPort, setLanPort] = useState("5173");
   const [loading, setLoading] = useState(false);
-  const [logs, setLogs] = useState(["[READY] Interfaz conectada y lista."]);
+  const logId = useRef(0);
+  const [logs, setLogs] = useState(() => [
+    { id: 0, time: new Date().toLocaleTimeString(), message: "[READY] Interfaz lista." }
+  ]);
   const [scrapedData, setScrapedData] = useState(null);
+  const [backendStatus, setBackendStatus] = useState("checking");
+  const [backendCheck, setBackendCheck] = useState(0);
 
   useEffect(() => {
-    fetchSystemInfo().then((info) => {
-      if (info?.local_ip) setLanIp(info.local_ip);
-    });
-  }, []);
+    let active = true;
+    fetchSystemInfo()
+      .then((info) => {
+        if (!active) return;
+        if (info?.local_ip) setLanIp(info.local_ip);
+        setBackendStatus("online");
+      })
+      .catch(() => {
+        if (active) setBackendStatus("offline");
+      });
+    return () => { active = false; };
+  }, [backendCheck]);
+
+  const createLog = (message) => ({
+    id: ++logId.current,
+    time: new Date().toLocaleTimeString(),
+    message
+  });
+
+  const appendLog = (message) => {
+    const entry = createLog(message);
+    setLogs((prev) => [...prev, entry].slice(-200));
+  };
 
   const handleClearLogs = () => {
-    setLogs(["[READY] Registro de consola reiniciado."]);
+    setLogs([createLog("[READY] Registro de consola reiniciado.")]);
   };
 
   const handleStartScrape = (username, target, limitsConfig = {}) => {
     setLoading(true);
-    setLogs((prev) => [
-      ...prev,
-      `[INIT] Iniciando extracción para @${username} (${target})...`,
+    appendLog(
+      `[INIT] Iniciando extracción para @${username} (${target})...`
+    );
+    appendLog(
       `[CONFIG] Límites: ${limitsConfig.max_videos || 19} videos, ${limitsConfig.max_comment_videos || 2} para comentarios, ${limitsConfig.max_following || 20} seguidos, ${limitsConfig.max_followers || 20} seguidores.`
-    ]);
+    );
 
     connectScraperSocket({
       username,
       target,
       ...limitsConfig,
-      onLog: (msg) => setLogs((prev) => [...prev, msg]),
+      onLog: appendLog,
       onResult: (data) => {
         setScrapedData(data);
         setLoading(false);
       },
       onError: (err) => {
-        setLogs((prev) => [...prev, `[ERROR] ${err}`]);
+        appendLog(`[ERROR] ${err}`);
         setLoading(false);
       }
     });
@@ -55,6 +82,11 @@ export default function App() {
         <Navbar
           lanIp={lanIp}
           lanPort={lanPort}
+          backendStatus={backendStatus}
+          onCheckBackend={() => {
+            setBackendStatus("checking");
+            setBackendCheck((prev) => prev + 1);
+          }}
           onOpenMobile={() => setActiveTab("lan")}
         />
 
@@ -95,29 +127,40 @@ export default function App() {
         </nav>
 
         <main>
-          {activeTab === "extractor" && (
-            <ExtractorPage
-              onStartScrape={handleStartScrape}
-              loading={loading}
-              logs={logs}
-              data={scrapedData}
-              onGoMetrics={() => setActiveTab("metrics")}
-              onClearLogs={handleClearLogs}
-            />
-          )}
+          <Suspense
+            fallback={
+              <div
+                role="status"
+                className="py-12 text-center text-sm text-slate-400"
+              >
+                Cargando...
+              </div>
+            }
+          >
+            {activeTab === "extractor" && (
+              <ExtractorPage
+                onStartScrape={handleStartScrape}
+                loading={loading}
+                logs={logs}
+                data={scrapedData}
+                onGoMetrics={() => setActiveTab("metrics")}
+                onClearLogs={handleClearLogs}
+              />
+            )}
 
-          {activeTab === "lan" && (
-            <LanAccessPage
-              lanIp={lanIp}
-              lanPort={lanPort}
-              setLanIp={setLanIp}
-              setLanPort={setLanPort}
-            />
-          )}
+            {activeTab === "lan" && (
+              <LanAccessPage
+                lanIp={lanIp}
+                lanPort={lanPort}
+                setLanIp={setLanIp}
+                setLanPort={setLanPort}
+              />
+            )}
 
-          {activeTab === "metrics" && (
-            <MetricsPage data={scrapedData} />
-          )}
+            {activeTab === "metrics" && (
+              <MetricsPage data={scrapedData} />
+            )}
+          </Suspense>
         </main>
       </div>
     </div>

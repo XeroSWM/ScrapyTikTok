@@ -17,7 +17,7 @@ export default function VideosGrid({ videos }) {
         {videos.map((vid, idx) => (
           <div key={idx} className="group relative rounded-xl overflow-hidden bg-slate-950 border border-slate-800 aspect-[9/16] shadow-md">
             {vid.thumbnail ? (
-              <img src={vid.thumbnail} alt="" className="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+              <img src={vid.thumbnail} loading={idx < 4 ? "eager" : "lazy"} decoding="async" alt="" className="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-slate-600 text-xs">Sin preview</div>
             )}
