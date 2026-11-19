@@ -7,6 +7,7 @@ import {
   Bot, RefreshCw, Lightbulb, Target, CheckCheck
 } from "lucide-react";
 import StatsCards from "../components/StatsCards";
+import { generateGeminiReport } from "../services/api";
 
 export default function MetricsPage({ data }) {
   const [internalTab, setInternalTab] = useState("videos");
@@ -162,27 +163,20 @@ export default function MetricsPage({ data }) {
   // 4. FUNCIÓN PARA DISPARAR GEMINI AUDIT
   // ==========================================
   const handleGenerateGeminiReport = async () => {
+    if (loadingAi) return;
     setLoadingAi(true);
     setAiError(null);
+    setGeminiReport(null);
+
     try {
-      const response = await fetch("http://localhost:8000/api/ai/gemini-report", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          profile: profile || {},
-          psychometrics: psychometrics || {},
-          frequency: publicationFrequency?.label || "Moderada"
-        })
+      const result = await generateGeminiReport({
+        profile: profile || {},
+        psychometrics: psychometrics || {},
+        frequency: publicationFrequency?.label || "Moderada"
       });
-
-      if (!response.ok) {
-        throw new Error("No se pudo obtener la respuesta del servidor");
-      }
-
-      const result = await response.json();
       setGeminiReport(result);
     } catch (err) {
-      setAiError(err.message || "Error al conectar con la API de Gemini");
+      setAiError(err.message || "Error al conectar con Gemini");
     } finally {
       setLoadingAi(false);
     }
@@ -471,13 +465,15 @@ export default function MetricsPage({ data }) {
               </p>
             ) : viewMode === "grid" ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
-                {filteredVideos.map((vid) => (
+                {filteredVideos.map((vid, idx) => (
                   <div
                     key={vid?.id || Math.random()}
                     className="group relative rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 aspect-[9/16] shadow-xl hover:border-slate-700 transition"
                   >
                     <img
                       src={vid?.thumbnail}
+                      loading={idx < 4 ? "eager" : "lazy"}
+                      decoding="async"
                       alt="Thumbnail video"
                       className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                     />
@@ -525,13 +521,19 @@ export default function MetricsPage({ data }) {
               </div>
             ) : (
               <div className="space-y-2">
-                {filteredVideos.map((vid) => (
+                {filteredVideos.map((vid, idx) => (
                   <div
                     key={vid?.id || Math.random()}
                     className="flex items-center justify-between p-3 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-slate-700 transition"
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <img src={vid?.thumbnail} alt="" className="w-10 h-14 rounded-lg object-cover shrink-0" />
+                      <img
+                        src={vid?.thumbnail}
+                        loading={idx < 4 ? "eager" : "lazy"}
+                        decoding="async"
+                        alt=""
+                        className="w-10 h-14 rounded-lg object-cover shrink-0"
+                      />
                       <div className="min-w-0">
                         <p className="text-xs font-bold text-white">Video #{vid?.id}</p>
                         <p className="text-[11px] text-slate-400 truncate max-w-md">{vid?.desc || vid?.url}</p>
