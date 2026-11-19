@@ -55,7 +55,7 @@ export default function ProfilePreview({ profile, videos, onGoMetrics }) {
             videos.slice(0, 4).map((vid, idx) => (
               <div key={idx} className="relative aspect-[9/16] rounded-md overflow-hidden bg-slate-950 border border-slate-800">
                 {vid.thumbnail ? (
-                  <img src={vid.thumbnail} alt="" className="w-full h-full object-cover" />
+                  <img src={vid.thumbnail} decoding="async" alt="" className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-[10px] text-slate-600">Video</div>
                 )}

@@ -1,7 +1,7 @@
 import React from "react";
 import { Wifi, Smartphone } from "lucide-react";
 
-export default function Navbar({ lanIp, lanPort, onOpenMobile }) {
+export default function Navbar({ lanIp, lanPort, backendStatus, onCheckBackend, onOpenMobile }) {
   return (
     <header className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
       <div className="flex items-center gap-3">
@@ -19,11 +19,30 @@ export default function Navbar({ lanIp, lanPort, onOpenMobile }) {
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs text-cyan-400 font-mono">
           <Wifi className="w-3.5 h-3.5" />
           <span>LAN: {lanIp}:{lanPort}</span>
         </div>
+        <button
+          type="button"
+          onClick={onCheckBackend}
+          disabled={backendStatus === "checking"}
+          title="Estado de la última comprobación. Pulsa para comprobar otra vez."
+          className={`text-xs px-3 py-1.5 rounded-lg border ${
+            backendStatus === "online"
+              ? "text-emerald-400 border-emerald-800"
+              : backendStatus === "offline"
+              ? "text-rose-400 border-rose-800"
+              : "text-amber-400 border-amber-800"
+          }`}
+        >
+          {backendStatus === "online"
+            ? "Servidor disponible"
+            : backendStatus === "offline"
+            ? "Sin conexión"
+            : "Comprobando..."}
+        </button>
         <button
           onClick={onOpenMobile}
           className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition border border-slate-700"
