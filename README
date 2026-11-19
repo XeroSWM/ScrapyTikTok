@@ -2,9 +2,9 @@
 
 # VerifAI Scraper
 
-### Auditoria inteligente de perfiles publicos de TikTok
+### Auditoria y analisis exploratorio de perfiles publicos de TikTok
 
-**De datos dispersos a recomendaciones claras para creadores y equipos de marketing.**
+**Metricas, contenido e inteligencia artificial en un solo recorrido de analisis.**
 
 ![Estado](https://img.shields.io/badge/Estado-En%20desarrollo-38bdf8)
 ![Web](https://img.shields.io/badge/Web-React%2019-61DAFB?logo=react&logoColor=white)
@@ -12,100 +12,217 @@
 ![Backend](https://img.shields.io/badge/API-FastAPI-009688?logo=fastapi&logoColor=white)
 ![IA](https://img.shields.io/badge/IA-Google%20Gemini-4285F4?logo=google&logoColor=white)
 
-[Ver demo web](https://vocal-naiad-d26a24.netlify.app/) · [Ver diseno en Figma](https://www.figma.com/design/Dsw33LMM9VgIUnBDyn5KnZ/Untitled?node-id=0-1&t=4OPVBBl5ebxaW8dP-1)
+Proyecto academico · Universidad Central del Ecuador · FICA
+
+[Demo web](https://vocal-naiad-d26a24.netlify.app/) · [Prototipo en Figma](https://www.figma.com/design/Dsw33LMM9VgIUnBDyn5KnZ/Untitled?node-id=0-1&t=4OPVBBl5ebxaW8dP-1)
 
 </div>
 
 ---
 
-## Presentacion del proyecto
+> **Alcance del analisis:** los puntajes Big Five son estimaciones semanticas generadas a partir de texto publico. No constituyen un test psicometrico validado ni un diagnostico profesional.
 
-VerifAI Scraper es un proyecto academico de auditoria de perfiles publicos de TikTok. Integra una interfaz web, una aplicacion movil y una API backend para recopilar datos, calcular indicadores y presentar un analisis ejecutivo.
+## Contenido
 
-La plataforma organiza la informacion en torno a cuatro preguntas:
+1. [Presentacion](#1-presentacion)
+2. [Equipo](#2-equipo)
+3. [Problema](#3-problema)
+4. [Propuesta de valor](#4-propuesta-de-valor)
+5. [Prototipo y recursos](#5-prototipo-y-recursos)
+6. [Metodologia: Domain-Driven Design](#6-metodologia-domain-driven-design-ddd)
+7. [Arquitectura](#7-arquitectura)
+8. [Estructura del repositorio](#8-estructura-del-repositorio)
+9. [Inicio rapido](#9-inicio-rapido)
+10. [Comandos](#10-comandos)
+11. [Como funciona cada modulo](#11-como-funciona-cada-modulo)
+12. [Contrato de datos](#12-contrato-de-datos)
+13. [Web y API](#13-web-y-api)
+14. [Aplicacion movil](#14-aplicacion-movil)
+15. [Pruebas y estado del proyecto](#15-pruebas-y-estado-del-proyecto)
+16. [Inteligencia artificial](#16-inteligencia-artificial)
+17. [Limitaciones y uso responsable](#17-limitaciones-y-uso-responsable)
 
-1. **Que publica el perfil y que interaccion genera?**
-2. **Con que frecuencia publica y que temas aparecen en su contenido?**
-3. **Que rasgos comunicacionales y nichos comerciales sugiere el texto analizado?**
-4. **Que acciones de crecimiento y monetizacion se pueden considerar?**
+---
 
-> **Proposito:** reunir metricas y analisis en una experiencia clara, en lugar de depender de revisiones manuales o de una sola cifra, como el numero de seguidores.
+## 1. Presentacion
 
-## El problema
+**VerifAI Scraper** es una plataforma academica para explorar perfiles publicos de TikTok. Combina una aplicacion web, una aplicacion movil y un backend en Python para recopilar datos dentro de limites configurables, calcular indicadores y presentar resultados en vistas especializadas.
 
-La evaluacion manual de perfiles puede ser lenta y fragmentada. Revisar por separado seguidores, publicaciones, comentarios y afinidad con marcas no ofrece facilmente una lectura integral del rendimiento de un creador.
+Una auditoria organiza el analisis alrededor de cuatro preguntas:
 
-Ademas, las metricas superficiales no explican por si solas la constancia de publicacion, la respuesta de la audiencia ni la relacion entre el contenido y posibles nichos comerciales.
+| Pregunta | Resultado |
+|---|---|
+| Que actividad publica el perfil? | Resumen del perfil y publicaciones recopiladas |
+| Que interaccion y temas aparecen? | Engagement, vistas, hashtags y frecuencia estimada |
+| Que patrones semanticos muestra el texto? | Puntajes OCEAN exploratorios, arquetipo y afinidad de nichos |
+| Que acciones se pueden considerar? | Diagnostico, monetizacion y consejo de mejora generados con Gemini, si esta configurado |
 
-### La respuesta de VerifAI
-
-VerifAI automatiza la recopilacion limitada de datos publicos y los presenta en un flujo que combina:
-
-- Indicadores cuantitativos de perfil y contenido.
-- Frecuencia de publicacion y hashtags frecuentes.
-- Analisis semantico exploratorio basado en Big Five (OCEAN).
-- Afinidad estimada con nichos comerciales.
-- Un reporte generado por Gemini con diagnostico y recomendaciones.
-
-## A quien esta dirigido
-
-| Usuario | Necesidad que atiende |
-| --- | --- |
-| Creadores de contenido | Comprender su actividad y encontrar oportunidades para mejorar su presencia |
-| Analistas de marketing | Explorar perfiles y organizar indicadores para una evaluacion inicial |
-| Equipos de marca | Consultar afinidades tematicas como referencia para una posible colaboracion |
-| Comunidad academica | Explorar la integracion de scraping, analitica e IA en una aplicacion |
-
-## Recorrido de la experiencia
+### Recorrido del usuario
 
 ```mermaid
 flowchart LR
-    A[Configurar usuario y limites] --> B[Extraer datos publicos]
-    B --> C[Consultar progreso en vivo]
-    C --> D[Calcular metricas y hashtags]
-    D --> E[Analizar OCEAN y afinidad]
-    E --> F[Generar reporte con Gemini]
-    F --> G[Explorar resultados web o movil]
+    A[Configurar perfil y limites] --> B[Iniciar extraccion]
+    B --> C[Ver progreso en vivo]
+    C --> D[Consultar metricas y contenido]
+    D --> E[Explorar analisis OCEAN y nichos]
+    E --> F[Solicitar reporte ejecutivo]
 ```
 
-### Que recibe el usuario
+## 2. Equipo
 
-| Seccion | Informacion presentada |
-| --- | --- |
-| Perfil | Nombre, biografia y metricas disponibles |
-| Videos | Publicaciones y datos como vistas, likes, comentarios y compartidos |
-| Comentarios | Comentarios recopilados dentro de los limites configurados |
-| Red | Listas de seguidores y seguidos cuando la extraccion los obtiene |
-| Hashtags | Frecuencia de etiquetas encontradas en la biografia, videos y comentarios |
-| Big Five e IA | Puntajes OCEAN, arquetipo, afinidades y reporte ejecutivo cuando estan disponibles |
+Desarrollado en la **Universidad Central del Ecuador (UCE)**, **Facultad de Ingenieria y Ciencias Aplicadas (FICA)**.
 
-## Funcionalidades principales
+| Integrante |
+|---|
+| Xavier Monteros |
+| Dereck Amacoria |
+| Cristian Araujo |
+| Ariel Guerron |
 
-### Extraccion en vivo
+## 3. Problema
 
-- Consulta perfiles publicos mediante Playwright.
-- Permite establecer limites para videos, videos con comentarios y elementos de seguidores/seguidos.
-- Transmite mensajes de progreso a la interfaz mediante WebSocket.
-- Devuelve los resultados recopilados a la web o a la aplicacion movil.
+La evaluacion manual de perfiles suele requerir revisar por separado seguidores, publicaciones, comentarios y otras señales. Enfocarse en una metrica aislada, como el numero de seguidores, tampoco muestra por si sola la actividad reciente, la interaccion observada o los temas asociados al contenido.
 
-### Analisis del perfil
+Esto hace mas dificil preparar una lectura inicial consistente del perfil y encontrar informacion relevante sin cambiar continuamente entre distintas vistas o fuentes.
 
-- Calcula y presenta indicadores de actividad y engagement disponibles en los datos.
-- Clasifica la frecuencia de publicacion como Alta, Moderada o Pausada; puede mostrar Sin Datos cuando no hay muestra.
-- Cuenta y ordena hashtags detectados.
-- Analiza contenido textual con Sentence Transformers para estimar rasgos OCEAN y afinidad semantica con nichos.
+### Necesidad identificada
 
-### Reporte ejecutivo
+- **Informacion dispersa:** perfil, publicaciones y comentarios se revisan por separado.
+- **Metricas insuficientes por si solas:** el alcance no explica todo el contexto de la actividad.
+- **Revision manual:** recopilar y resumir informacion consume tiempo.
+- **Interpretacion compleja:** transformar contenido y metricas en observaciones entendibles requiere trabajo adicional.
 
-Cuando el servicio de Gemini esta configurado, el sistema solicita un reporte con:
+## 4. Propuesta de valor
 
-1. Diagnostico del perfil.
-2. Estrategia de monetizacion.
-3. Consejo tactico de mejora.
+VerifAI reune datos publicos de un perfil en un flujo de extraccion y analisis. Su proposito es facilitar una **evaluacion exploratoria**, no certificar la calidad de una audiencia ni predecir el exito de una colaboracion.
 
-El reporte complementa los indicadores; no reemplaza la revision profesional ni garantiza resultados comerciales.
+| Capacidad | Aporte |
+|---|---|
+| Extraccion configurable | Limita cuantos videos, comentarios y relaciones se consultan |
+| Progreso en vivo | Informa a la interfaz mientras se procesa la solicitud |
+| Metricas y hashtags | Facilita una lectura inicial de la actividad y los temas publicados |
+| Analisis semantico | Estima rasgos OCEAN y similitud con nichos a partir de texto |
+| Reporte ejecutivo | Organiza recomendaciones generadas por IA en secciones legibles |
+| Acceso multiplataforma | Ofrece una interfaz web y una aplicacion movil |
 
-## Arquitectura tecnica
+## 5. Prototipo y recursos
+
+- **Demo web:** [vocal-naiad-d26a24.netlify.app](https://vocal-naiad-d26a24.netlify.app/)
+- **Diseno en Figma:** [VerifAI Scraper](https://www.figma.com/design/Dsw33LMM9VgIUnBDyn5KnZ/Untitled?node-id=0-1&t=4OPVBBl5ebxaW8dP-1)
+
+La aplicacion web tiene vistas de **Extractor en Vivo**, **Acceso Movil LAN & QR** y **Resultados & Metricas**. La aplicacion movil organiza la experiencia en una vista de extraccion y subsecciones para resultados.
+
+## 6. Metodologia: Domain-Driven Design (DDD)
+
+El proyecto adopta conceptos de DDD para ordenar el sistema alrededor del problema de auditar perfiles de creadores. Es una aplicacion **inspirada en DDD**: los contextos y el lenguaje del dominio guian la organizacion, pero varios modelos siguen representados como diccionarios y estructuras JSON, no como entidades de dominio formales.
+
+### 6.1 Dominio
+
+El dominio del producto es la **auditoria exploratoria de perfiles de creadores**: recopilar señales publicas, interpretarlas y presentar un resumen que ayude a comprender el perfil.
+
+La tecnologia de scraping, los embeddings y el proveedor de IA son mecanismos que apoyan ese objetivo; no son el objetivo de negocio en si.
+
+### 6.2 Subdominios
+
+| Subdominio | Enfoque | Papel en el sistema |
+|---|---|---|
+| Auditoria de perfiles | Dominio principal | Reunir observaciones y conclusiones para presentar el perfil |
+| Extraccion de datos | Soporte | Obtener datos publicos de perfiles, videos, comentarios y relaciones |
+| Analitica cuantitativa | Soporte | Resumir interaccion, frecuencia y hashtags |
+| Perfilamiento semantico | Soporte especializado | Estimar puntajes OCEAN y similitud con nichos |
+| Auditoria ejecutiva | Soporte | Generar diagnostico y recomendaciones con Gemini |
+
+### 6.3 Contextos delimitados
+
+| Contexto | Responsabilidad | Implementacion actual |
+|---|---|---|
+| `ScrapingContext` | Consultar TikTok y normalizar los datos recopilados | `TikTokScraperService` |
+| `MetricsContext` | Resumir actividad y calcular indicadores derivados | Backend y logica de presentacion web/movil |
+| `PsychometricsContext` | Estimar puntajes OCEAN, arquetipo y afinidad de nichos | `BigFiveEmbeddingService` |
+| `AdvisoryContext` | Convertir informacion de perfil en un reporte ejecutivo | `GeminiAuditService` |
+
+Los contextos se comunican mediante datos JSON. Por ejemplo, el servicio psicometrico recibe perfil, videos y comentarios; el reporte ejecutivo recibe perfil, psicometria y frecuencia.
+
+### 6.4 Lenguaje ubicuo
+
+El mismo vocabulario se usa en los contratos del backend y en las interfaces. La implementacion actual conserva varios nombres tecnicos en ingles:
+
+| Concepto | Nombre usado en el codigo | Significado |
+|---|---|---|
+| Perfil | `profile` / `username` | Cuenta publica que se analiza |
+| Video | `videos` / `id` | Publicacion y sus metricas disponibles |
+| Comentario | `comments` / `video_id` | Texto recopilado y referencia al video |
+| Limites de extraccion | `max_videos`, `max_comment_videos`, `max_followers`, `max_following` | Maximos para cada tipo de consulta |
+| Engagement | `engagement` | Indicador calculado y presentado para el perfil |
+| Puntajes OCEAN | `ocean_scores` | Valores para Apertura, Responsabilidad, Extraversión, Amabilidad y Estabilidad Emocional |
+| Arquetipo | `arquetipo` | Etiqueta asociada al rasgo dominante estimado |
+| Afinidad comercial | `marcas_recomendadas` | Nichos con mayor similitud semantica |
+| Auditoria ejecutiva | `diagnostico_perfil`, `estrategia_monetizacion`, `consejo_mejora` | Secciones del reporte generado con Gemini |
+
+### 6.5 Mapa de contexto
+
+```mermaid
+flowchart LR
+    T[ TikTok ] --> S[ScrapingContext]
+    S --> M[MetricsContext]
+    S --> P[PsychometricsContext]
+    M --> A[AdvisoryContext]
+    P --> A
+    S --> UI[Web y aplicacion movil]
+    M --> UI
+    P --> UI
+    A --> UI
+```
+
+| Relacion | Datos intercambiados |
+|---|---|
+| Extraccion → Metricas | Perfil, videos y metricas recopiladas |
+| Extraccion → Perfilamiento | Biografia, descripciones de videos y comentarios disponibles |
+| Metricas + perfilamiento → Auditoria ejecutiva | Perfil, frecuencia e indicadores psicometricos |
+| API → interfaces | Respuestas JSON y mensajes de estado WebSocket |
+
+El mapa representa la separacion funcional del proyecto; no implica que existan adaptadores de dominio o un bus de eventos independientes.
+
+### 6.6 Diseno tactico y alcance
+
+#### Entidades y conceptos con identidad
+
+El flujo trabaja con conceptos identificables como perfil (`username`), video (`id`) y comentario (`id`). Actualmente se transportan como diccionarios dentro de la respuesta, no como clases entidad persistidas.
+
+#### Objetos de valor conceptuales
+
+Los limites, puntajes OCEAN, etiquetas de frecuencia, metricas y pares nicho/similitud describen configuraciones o mediciones. Viajan como valores en la API; no todos estan encapsulados en tipos de valor dedicados.
+
+#### Servicios
+
+| Servicio | Responsabilidad |
+|---|---|
+| `TikTokScraperService` | Controlar la extraccion y construir los datos de perfil, videos, comentarios y relaciones |
+| `BigFiveEmbeddingService` | Comparar embeddings de texto con anclajes OCEAN y descripciones de nichos |
+| `GeminiAuditService` | Solicitar y estructurar el reporte ejecutivo generado por Gemini |
+
+#### Casos de uso y capa de aplicacion
+
+`backend/main.py` actua como punto de entrada: recibe solicitudes, coordina servicios y devuelve respuestas.
+
+| Operacion | Flujo coordinado |
+|---|---|
+| `POST /api/scrape` | Extrae datos y agrega el analisis psicometrico |
+| `POST /api/analyze/big-five` | Analiza o recalcula los puntajes OCEAN |
+| `POST /api/ai/gemini-report` | Solicita el reporte ejecutivo |
+| `WebSocket /ws/scrape` | Ejecuta el flujo y comunica progreso y resultado |
+
+Los modelos `ScrapeRequest`, `BigFiveRequest` y `GeminiReportRequest` definen contratos de entrada para las operaciones HTTP.
+
+#### Agregados, repositorios y persistencia
+
+No hay agregados formales, repositorios ni base de datos en la implementacion actual. Los datos se procesan en memoria y se envian al cliente. Por ello, estos patrones se documentan como **no implementados**, no como parte de la arquitectura existente.
+
+Los mensajes WebSocket (`log`, `result`, `error`) notifican a la interfaz; no son eventos de dominio persistidos ni implementan event sourcing.
+
+## 7. Arquitectura
+
+### 7.1 Vista general
 
 ```mermaid
 flowchart TB
@@ -113,178 +230,112 @@ flowchart TB
         WEB[Web: React + Vite]
         MOB[Movil: React Native + Expo]
     end
-    WEB -->|HTTP y WebSocket| API[API: FastAPI]
+    WEB -->|HTTP y WebSocket| API[FastAPI]
     MOB -->|HTTP y WebSocket| API
-    API --> SCR[ TikTokScraperService ]
-    SCR --> EXT[Datos publicos de TikTok]
+    API --> SCR[TikTokScraperService]
+    SCR --> TIKTOK[TikTok]
     API --> PSY[BigFiveEmbeddingService]
     PSY --> EMB[Sentence Transformers]
     API --> GEM[GeminiAuditService]
     GEM --> MODEL[Google Gemini API]
-    API -->|JSON y mensajes de progreso| WEB
-    API -->|JSON y mensajes de progreso| MOB
+    API -->|JSON y estado| WEB
+    API -->|JSON y estado| MOB
 ```
 
-### Responsabilidad por capa
+### 7.2 Responsabilidades
 
-| Capa | Responsabilidad |
-| --- | --- |
-| Web y movil | Configurar consultas, mostrar progreso y presentar resultados |
-| API y aplicacion | Validar solicitudes, coordinar servicios y exponer REST/WebSocket |
-| Extraccion | Navegar con Playwright y normalizar los datos recopilados |
-| Analitica | Calcular indicadores derivados y procesar texto con embeddings |
-| Auditoria IA | Solicitar a Gemini un reporte ejecutivo a partir de los datos disponibles |
+| Componente | Responsabilidad |
+|---|---|
+| Aplicacion web | Solicitar extracciones, mostrar registros y presentar metricas |
+| Aplicacion movil | Iniciar la extraccion desde LAN y presentar resultados |
+| FastAPI | Exponer contratos HTTP/WebSocket y coordinar servicios |
+| Playwright | Navegar y recopilar datos publicos dentro de los limites configurados |
+| Sentence Transformers | Crear embeddings para comparar texto con anclajes y nichos |
+| Google Gemini | Redactar las secciones del reporte ejecutivo |
 
-## Domain-Driven Design en VerifAI
+### 7.3 Flujo de una auditoria
 
-El proyecto utiliza principios de DDD para organizar el problema de auditoria alrededor de conceptos del negocio, en vez de tratar la aplicacion como una simple coleccion de pantallas o herramientas tecnicas. Es una **aplicacion practica e inspirada en DDD**: algunos conceptos se representan como estructuras JSON y no como clases formales del modelo de dominio.
+1. El usuario ingresa un `username` y configura los limites.
+2. El cliente envia una solicitud al backend.
+3. `TikTokScraperService` recopila y normaliza los datos.
+4. `BigFiveEmbeddingService` estima puntajes y afinidades.
+5. El cliente recibe el resultado; durante `/ws/scrape` tambien recibe mensajes de progreso.
+6. Si esta configurado Gemini, la interfaz puede solicitar el reporte ejecutivo.
 
-### DDD estrategico
+El backend usa un semaforo para procesar una extraccion a la vez.
 
-#### Dominio y subdominio
+## 8. Estructura del repositorio
 
-- **Dominio principal:** auditoria y analisis de perfiles de creadores.
-- **Subdominio de soporte:** extraccion de datos publicos.
-- **Subdominio de soporte:** calculo de metricas y frecuencia.
-- **Subdominio especializado:** perfilamiento semantico y afinidad comercial.
-- **Subdominio de soporte:** generacion del reporte ejecutivo.
+```text
+VerifAI-Grupo2/
+├── README
+├── backend/
+│   ├── main.py
+│   ├── scraper.py
+│   ├── login.py
+│   ├── requirements.txt
+│   ├── services/
+│   │   ├── tiktok_service.py
+│   │   ├── psychometric_service.py
+│   │   └── gemini_service.py
+│   └── utils/
+│       └── network.py
+├── frontend/
+│   ├── package.json
+│   └── src/
+│       ├── App.jsx
+│       ├── services/api.js
+│       ├── pages/
+│       │   ├── ExtractorPage.jsx
+│       │   ├── LanAccessPage.jsx
+│       │   └── MetricsPage.jsx
+│       └── components/
+└── mobile/
+    ├── App.js
+    ├── app.json
+    └── package.json
+```
 
-La automatizacion del navegador y los proveedores de IA son mecanismos que apoyan el dominio; no definen por si solos el objetivo del producto.
+## 9. Inicio rapido
 
-#### Lenguaje ubicuo
-
-Los terminos del analisis se comparten entre la API y las interfaces para que las solicitudes y resultados describan el mismo problema:
-
-| Termino | Uso en el proyecto |
-| --- | --- |
-| Perfil | Usuario publico objetivo, identificado por `username` |
-| Extraccion | Consulta de perfil, videos, comentarios y relaciones publicas |
-| Engagement | Indicador presentado para interpretar la interaccion del perfil |
-| Frecuencia | Clasificacion de la actividad de publicacion observada |
-| OCEAN | Cinco dimensiones del modelo Big Five |
-| Arquetipo | Etiqueta asociada al rasgo dominante estimado |
-| Afinidad de marca | Similitud semantica estimada con un nicho comercial |
-| Auditoria ejecutiva | Diagnostico, estrategia de monetizacion y consejo de mejora |
-
-#### Contextos delimitados
-
-Los contextos separan responsabilidades y mantienen sus propios objetivos:
-
-| Contexto | Responsabilidad | Implementacion actual |
-| --- | --- | --- |
-| `ScrapingContext` | Obtener y normalizar datos publicos | `TikTokScraperService` |
-| `MetricsContext` | Interpretar actividad, frecuencia y hashtags | Calculos en el backend y las interfaces |
-| `PsychometricsContext` | Estimar OCEAN, arquetipo y afinidad | `BigFiveEmbeddingService` |
-| `AdvisoryContext` | Redactar conclusiones y recomendaciones | `GeminiAuditService` |
-
-La API intercambia informacion entre estos contextos mediante solicitudes y respuestas JSON. Por ejemplo, el analisis psicometrico recibe perfil, videos y comentarios; el reporte ejecutivo recibe el perfil, la psicometria y la frecuencia.
-
-### DDD tactico
-
-#### Entidades y conceptos con identidad
-
-En los datos del sistema se reconocen conceptos cuya identidad importa:
-
-- **Perfil:** identificado por el `username`.
-- **Video:** identificado por `vid_id`.
-- **Comentario:** identificado por su identificador y asociado al contenido correspondiente.
-- **Reporte de auditoria:** resultado generado para un perfil analizado.
-
-Actualmente estos conceptos se transportan como diccionarios y listas JSON; no se implementan como entidades persistidas con clases dedicadas.
-
-#### Objetos de valor
-
-Los siguientes conceptos representan datos descriptivos o configuraciones sin identidad propia:
-
-- **Limites de extraccion:** maximos de videos, comentarios, seguidores y seguidos.
-- **Puntajes OCEAN:** valores de las cinco dimensiones.
-- **Frecuencia de publicacion:** categoria derivada de la muestra disponible.
-- **Afinidad comercial:** nicho y similitud calculada.
-- **Metricas de interaccion:** vistas, likes, comentarios y compartidos.
-
-Son conceptos del modelo funcional que viajan dentro de los contratos de la API; no todos estan encapsulados en tipos/clases de valor dedicados.
-
-#### Servicios
-
-La logica que coordina procesos se agrupa en servicios:
-
-- `TikTokScraperService`: navega, recopila y transforma la informacion.
-- `BigFiveEmbeddingService`: genera embeddings y estima puntajes y afinidades.
-- `GeminiAuditService`: prepara la solicitud y obtiene el reporte ejecutivo.
-
-`main.py` expone las operaciones HTTP/WebSocket y coordina estos servicios.
-
-#### Aplicacion y casos de uso
-
-FastAPI actua como punto de entrada y coordinacion de los casos de uso:
-
-| Operacion | Caso de uso |
-| --- | --- |
-| `POST /api/scrape` | Extraer datos y agregar el analisis psicometrico |
-| `POST /api/analyze/big-five` | Analizar o recalcular los puntajes OCEAN |
-| `POST /api/ai/gemini-report` | Solicitar el reporte ejecutivo |
-| `GET /api/info` | Consultar informacion de conexion |
-| `WebSocket /ws/scrape` | Recibir progreso y resultado de la extraccion |
-
-Los modelos `ScrapeRequest`, `BigFiveRequest` y `GeminiReportRequest` definen contratos de entrada para estas operaciones.
-
-#### Comunicacion de progreso
-
-`/ws/scrape` envia mensajes de estado durante la ejecucion y al final entrega el resultado. Estos mensajes actualizan la interfaz en tiempo real; **no son eventos de dominio persistidos** ni implementan un bus de eventos.
-
-#### Agregados, repositorios y persistencia: alcance actual
-
-El sistema no cuenta actualmente con una base de datos, agregados formales, repositorios ni eventos de dominio. Los resultados se procesan en memoria y se envian al cliente. Por eso, dichos patrones no se presentan como implementados.
-
-Esta aclaracion delimita el alcance de DDD en el proyecto y deja abierta la posibilidad de agregar persistencia en el futuro sin confundirla con la arquitectura que existe hoy.
-
-## Tecnologias
-
-| Componente | Herramientas |
-| --- | --- |
-| Backend | Python, FastAPI, Uvicorn, WebSockets |
-| Extraccion | Playwright, Playwright Stealth |
-| Analisis semantico | Sentence Transformers, NumPy, scikit-learn |
-| Generacion de reportes | Google Gemini |
-| Web | React 19, Vite, TailwindCSS, Lucide React |
-| Movil | React Native, Expo, Lucide React Native |
-
-## Guia de ejecucion local
-
-### Requisitos
+### 9.1 Requisitos
 
 - Python 3.11.
 - Node.js y npm.
-- Acceso a internet para la extraccion y descarga inicial del modelo de embeddings.
-- Una clave de Google Gemini para habilitar la generacion del reporte ejecutivo.
+- Microsoft Edge instalado: el scraper lo inicia con Playwright usando el canal `msedge`.
+- Acceso a internet para TikTok y la descarga inicial del modelo de embeddings.
+- Una clave de Google Gemini para generar reportes ejecutivos.
 
-### 1. Iniciar el backend
+> En `backend/requirements.txt` estan las dependencias base del servidor. Los servicios tambien importan `sentence-transformers`, `scikit-learn`, `numpy` y `google-genai`; instala estos paquetes si no estan disponibles en tu entorno.
 
-Desde la raiz del repositorio:
+### 9.2 Instalar e iniciar el backend
+
+Desde la raiz del repositorio, en Windows:
 
 ```powershell
 cd backend
 python -m venv venv
 .\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-playwright install chromium
+pip install sentence-transformers scikit-learn numpy google-genai
+python main.py
 ```
 
-Configura `backend/.env`:
+Si PowerShell bloquea la activacion del entorno, ejecuta `venv\Scripts\activate.bat` desde `cmd.exe`.
+
+El backend escucha en el puerto `8000`. La documentacion interactiva de FastAPI queda disponible en `http://localhost:8000/docs`.
+
+### 9.3 Configurar Google Gemini
+
+Para habilitar el reporte ejecutivo, crea `backend/.env`:
 
 ```env
 GOOGLE_API_KEY=tu_api_key
 ```
 
-Inicia la API:
+La clave no debe compartirse ni subirse al repositorio. Sin una clave valida, la extraccion y el analisis psicometrico pueden ejecutarse, pero el reporte Gemini no estara disponible.
 
-```powershell
-python main.py
-```
-
-La API se ejecuta en `http://localhost:8000`; la documentacion interactiva esta en `http://localhost:8000/docs`.
-
-### 2. Iniciar la aplicacion web
+### 9.4 Instalar e iniciar la web
 
 En otra terminal, desde la raiz:
 
@@ -296,7 +347,7 @@ npm run dev
 
 Abre la direccion que Vite muestra en la terminal.
 
-### 3. Iniciar la aplicacion movil
+### 9.5 Instalar e iniciar la app movil
 
 En otra terminal, desde la raiz:
 
@@ -306,44 +357,231 @@ npm install
 npx expo start
 ```
 
-Para conectar un dispositivo movil, este debe poder comunicarse con el backend en la misma red local. Consulta `GET /api/info` para obtener la direccion IP local reportada por el servidor.
+El dispositivo movil y la computadora deben poder comunicarse por la misma red local. En la app, configura la IP del equipo que ejecuta el backend.
 
-## API de referencia
+## 10. Comandos
 
-| Tipo | Ruta | Descripcion |
-| --- | --- | --- |
-| `GET` | `/api/info` | Devuelve direccion IP local y puerto |
-| `POST` | `/api/scrape` | Ejecuta extraccion y analisis psicometrico |
-| `POST` | `/api/analyze/big-five` | Calcula puntajes y perfil Big Five |
-| `POST` | `/api/ai/gemini-report` | Genera el reporte con Gemini |
-| `WebSocket` | `/ws/scrape` | Transmite registros de progreso y resultado |
+### Backend
 
-## Experiencia visual y diseno
+| Comando | Resultado |
+|---|---|
+| `python main.py` | Inicia FastAPI en el puerto `8000` |
 
-- **Flujo progresivo:** primero configura el perfil; luego consulta un resumen y explora resultados.
-- **Atomic Design:** organiza la interfaz en atomos, moleculas, organismos, plantillas y paginas.
-- **Modo oscuro:** usa fondos oscuros y contraste para diferenciar datos y secciones.
-- **Color semantico:** cian para informacion tecnica, coral para acciones, verde para estados positivos, violeta para psicometria y ambar para avisos.
-- **Multiplataforma:** ofrece acceso desde navegador y dispositivos compatibles con Expo.
+### Web
 
-## Equipo y contexto academico
+| Comando | Resultado |
+|---|---|
+| `npm run dev` | Inicia el servidor de desarrollo Vite |
+| `npm run build` | Genera el build de produccion |
+| `npm run lint` | Ejecuta ESLint |
+| `npm run preview` | Sirve localmente el build generado |
 
-Desarrollado en la **Universidad Central del Ecuador (UCE)**, **Facultad de Ingenieria y Ciencias Aplicadas (FICA)**.
+### Movil
 
-| Integrante |
-| --- |
-| Xavier Monteros |
-| Dereck Amacoria |
-| Cristian Araujo |
-| Ariel Guerron |
+| Comando | Resultado |
+|---|---|
+| `npx expo start` | Inicia Expo |
+| `npm run android` | Inicia Expo con destino Android |
+| `npm run ios` | Inicia Expo con destino iOS |
+| `npm run web` | Inicia Expo con destino web |
 
-## Uso responsable y limitaciones
+## 11. Como funciona cada modulo
 
-- Utilizar el proyecto con perfiles y datos publicos, respetando las condiciones de la plataforma y la normativa aplicable.
-- Configurar limites de extraccion razonables y evitar automatizacion masiva.
-- El analisis OCEAN es una estimacion semantica exploratoria; no es una evaluacion psicologica, clinica ni validada profesionalmente.
-- Las recomendaciones generadas por IA pueden ser incompletas o imprecisas y deben revisarse antes de tomar decisiones.
-- La disponibilidad de la extraccion depende de cambios en TikTok y de las condiciones de red.
+### 11.1 Extraccion de TikTok
+
+`TikTokScraperService` inicia una sesion persistente de Microsoft Edge mediante Playwright, visita el perfil y recopila las secciones solicitadas.
+
+| Parametro | Valor predeterminado |
+|---|---:|
+| `max_videos` | 19 |
+| `max_comment_videos` | 2 |
+| `max_following` | 20 |
+| `max_followers` | 20 |
+| `target` | `all` |
+
+Los valores se pueden enviar al endpoint o al WebSocket. El resultado depende del contenido disponible y de las condiciones de acceso a TikTok; los limites son maximos de consulta, no una garantia de que todos los datos esten disponibles.
+
+### 11.2 Metricas y hashtags
+
+- El servicio consolida vistas, likes, comentarios y compartidos de los videos.
+- Calcula vistas promedio y engagement cuando hay datos suficientes.
+- La web/movil presenta la frecuencia de publicacion por categorias.
+- Las interfaces web y movil cuentan hashtags de la biografia, descripciones de videos y comentarios disponibles.
+
+Estas metricas describen la muestra extraida y no necesariamente el historico completo de una cuenta.
+
+### 11.3 Perfilamiento semantico Big Five
+
+`BigFiveEmbeddingService` usa `all-MiniLM-L6-v2` para comparar el texto del perfil y las descripciones de videos con anclajes semanticos asociados a los cinco rasgos:
+
+| Rasgo | Dimension |
+|---|---|
+| Apertura | Creatividad, curiosidad e interes por ideas |
+| Responsabilidad | Organizacion, disciplina y constancia |
+| Extraversión | Energia social e interaccion |
+| Amabilidad | Empatia, cooperacion y cercania |
+| Estabilidad emocional | Calma, resiliencia y equilibrio |
+
+Los puntajes se normalizan para sumar 100. El rasgo con mayor puntaje determina el arquetipo. La afinidad comercial se calcula comparando el vector de texto con descripciones de nichos; el servicio devuelve los cuatro con mayor similitud.
+
+Los comentarios se cuentan para el resumen de audiencia, pero no se usan como corpus principal del vector del creador. La clasificacion no es una medicion psicologica validada.
+
+### 11.4 Auditoria ejecutiva con Gemini
+
+`GeminiAuditService` recibe el perfil, la psicometria y la frecuencia para generar:
+
+1. Diagnostico del perfil.
+2. Estrategia de monetizacion.
+3. Consejo de mejora.
+
+El servicio intenta modelos Gemini candidatos configurados en el backend. La respuesta generada es una recomendacion automatica y requiere criterio humano.
+
+## 12. Contrato de datos
+
+Las respuestas de scraping se representan en JSON. Ejemplo resumido:
+
+```json
+{
+  "profile": {
+    "name": "Nombre del perfil",
+    "username": "@usuario",
+    "bio": "Biografia publica",
+    "followers": "1.2K",
+    "likes": "8.5K",
+    "videosCount": "1",
+    "engagement": "4.25%",
+    "avgViews": "2.1K"
+  },
+  "videos": [
+    {
+      "id": 1,
+      "url": "https://www.tiktok.com/@usuario/video/123",
+      "thumbnail": "https://example.com/thumbnail.jpg",
+      "views": "2.1K",
+      "likes": "80",
+      "shares": "5",
+      "comments_count": "12",
+      "duration": "15s",
+      "desc": "Descripcion del video",
+      "create_time": 1700000000
+    }
+  ],
+  "comments": [],
+  "followers_list": [],
+  "following_list": [],
+  "psychometrics": {
+    "ocean_scores": {
+      "Apertura": 20,
+      "Responsabilidad": 20,
+      "Extraversión": 20,
+      "Amabilidad": 20,
+      "Estabilidad Emocional": 20
+    },
+    "dominant_trait": "Apertura",
+    "arquetipo": "El Visionario Creativo",
+    "marcas_recomendadas": [
+      { "niche": "Tecnologia y Software", "similarity": 70.0 }
+    ],
+    "resumen_audiencia": {
+      "comentarios_evaluados": 0,
+      "tono_comunidad": "Colaborativo y Cercano"
+    }
+  }
+}
+```
+
+Los valores del ejemplo son ilustrativos. La extraccion formatea algunas metricas como texto (por ejemplo, `1.2K`); los valores exactos dependen de la respuesta obtenida.
+
+## 13. Web y API
+
+### 13.1 Vistas web
+
+| Vista | Funcion |
+|---|---|
+| Extractor en Vivo | Configurar y seguir una extraccion |
+| Acceso Movil LAN & QR | Consultar opciones de acceso local desde un dispositivo |
+| Resultados & Metricas | Explorar videos, comentarios, red, hashtags y Big Five/IA |
+
+### 13.2 Endpoints
+
+| Metodo | Ruta | Funcion |
+|---|---|---|
+| `GET` | `/api/info` | Devuelve direccion IP local y puerto del backend |
+| `POST` | `/api/scrape` | Ejecuta scraping y agrega el analisis psicometrico |
+| `POST` | `/api/analyze/big-five` | Calcula o recalcula el analisis Big Five |
+| `POST` | `/api/ai/gemini-report` | Solicita un reporte ejecutivo |
+| `WebSocket` | `/ws/scrape` | Acepta limites de extraccion y envia progreso/resultado |
+
+### 13.3 Mensajes de WebSocket
+
+La solicitud inicial incluye `username`, `target` y los limites de extraccion. El servidor responde con mensajes JSON:
+
+| `type` | Contenido |
+|---|---|
+| `log` | Mensaje de progreso |
+| `result` | Resultado completo del scraping y la psicometria |
+| `error` | Descripcion del error ocurrido durante el flujo |
+
+## 14. Aplicacion movil
+
+La app movil esta construida con React Native y Expo. Permite iniciar el flujo de scraping por WebSocket y consultar subsecciones de resultados. La auditoria ejecutiva se solicita al endpoint HTTP de Gemini.
+
+Para uso en red local:
+
+1. Inicia el backend en una computadora accesible desde el telefono.
+2. Conecta ambos dispositivos a una red que permita comunicacion entre ellos.
+3. Configura en la app la IP de la computadora y confirma el puerto `8000`.
+4. Inicia Expo con `npx expo start`.
+
+La direccion `localhost` en un telefono se refiere al propio telefono, no a la computadora que ejecuta el backend.
+
+## 15. Pruebas y estado del proyecto
+
+### Estado funcional documentado
+
+| Componente | Alcance actual |
+|---|---|
+| Backend FastAPI | Endpoints HTTP y WebSocket para scraping, perfilamiento e informe |
+| Scraping | Extraccion configurable de datos de perfil, videos, comentarios y relaciones |
+| Perfilamiento | Embeddings, puntajes OCEAN, arquetipo y nichos recomendados |
+| Auditoria Gemini | Reporte ejecutivo disponible al configurar el servicio |
+| Web | Interfaz para extractor, acceso LAN y resultados |
+| Movil | Aplicacion Expo con extraccion y vistas de resultados |
+| Persistencia | No hay base de datos; los resultados se mantienen en el flujo de la aplicacion |
+
+No se encontraron suites de pruebas automatizadas ni scripts de prueba en los manifiestos actuales. La web cuenta con `npm run lint` y `npm run build` como verificaciones disponibles.
+
+## 16. Inteligencia artificial
+
+### IA utilizada por la aplicacion
+
+| Componente | Uso |
+|---|---|
+| Sentence Transformers (`all-MiniLM-L6-v2`) | Genera embeddings para comparar contenido con anclajes OCEAN y nichos |
+| Google Gemini | Redacta diagnostico, estrategia de monetizacion y consejo de mejora |
+
+El analisis es exploratorio: los embeddings no constituyen una prueba de personalidad validada y el texto generado puede contener errores. La salida debe interpretarse junto con las metricas observadas y revisarse por una persona.
+
+## 17. Limitaciones y uso responsable
+
+### Limitaciones tecnicas
+
+- TikTok puede cambiar su interfaz y estructura de datos, lo que puede afectar la extraccion.
+- Se procesa una muestra limitada por los valores de configuracion; no es un historico completo.
+- El engagement, la frecuencia y las afinidades dependen de los datos que pudieron recopilarse.
+- Los puntajes OCEAN son estimaciones de similitud semantica, no mediciones psicologicas validadas.
+- Gemini requiere configuracion y disponibilidad del servicio externo.
+- No existe persistencia de auditorias ni base de datos en la implementacion actual.
+- El acceso desde movil requiere que el backend sea alcanzable por la red local.
+
+### Consideraciones de privacidad y uso
+
+- Usa la herramienta solo con datos publicos y respeta las condiciones de la plataforma y la normativa aplicable.
+- Configura limites razonables y evita consultas masivas.
+- No uses estos resultados como unico criterio para decisiones laborales, comerciales o personales sobre un creador.
+- Revisa las salidas de IA antes de compartirlas o tomar decisiones.
+- No incluyas `GOOGLE_API_KEY`, `auth.json` ni archivos de sesion en commits o capturas.
+- La carpeta `tiktok_edge_profile/` y los archivos de autenticacion contienen datos locales sensibles; no los compartas.
 
 ---
 
