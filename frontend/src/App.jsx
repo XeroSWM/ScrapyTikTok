@@ -1,14 +1,16 @@
 
-import React, { useState, useEffect } from "react";
+
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { Play, Radio, BarChart3 } from "lucide-react";
 import Navbar from "./components/Navbar";
 import ExtractorPage from "./pages/ExtractorPage";
-import LanAccessPage from "./pages/LanAccessPage";
-import MetricsPage from "./pages/MetricsPage";
 import { fetchSystemInfo, connectScraperSocket } from "./services/api";
 
+const LanAccessPage = lazy(() => import("./pages/LanAccessPage"));
+const MetricsPage = lazy(() => import("./pages/MetricsPage"));
+
 export default function App() {
-  const [activeTab, setActiveTab] = useState("extractor"); // "extractor" | "lan" | "metrics"
+  const [activeTab, setActiveTab] = useState("extractor");
   const [lanIp, setLanIp] = useState("192.168.1.15");
   const [lanPort, setLanPort] = useState("5173");
   const [loading, setLoading] = useState(false);
@@ -95,29 +97,40 @@ export default function App() {
         </nav>
 
         <main>
-          {activeTab === "extractor" && (
-            <ExtractorPage
-              onStartScrape={handleStartScrape}
-              loading={loading}
-              logs={logs}
-              data={scrapedData}
-              onGoMetrics={() => setActiveTab("metrics")}
-              onClearLogs={handleClearLogs}
-            />
-          )}
+          <Suspense
+            fallback={
+              <div
+                role="status"
+                className="py-12 text-center text-sm text-slate-400"
+              >
+                Cargando...
+              </div>
+            }
+          >
+            {activeTab === "extractor" && (
+              <ExtractorPage
+                onStartScrape={handleStartScrape}
+                loading={loading}
+                logs={logs}
+                data={scrapedData}
+                onGoMetrics={() => setActiveTab("metrics")}
+                onClearLogs={handleClearLogs}
+              />
+            )}
 
-          {activeTab === "lan" && (
-            <LanAccessPage
-              lanIp={lanIp}
-              lanPort={lanPort}
-              setLanIp={setLanIp}
-              setLanPort={setLanPort}
-            />
-          )}
+            {activeTab === "lan" && (
+              <LanAccessPage
+                lanIp={lanIp}
+                lanPort={lanPort}
+                setLanIp={setLanIp}
+                setLanPort={setLanPort}
+              />
+            )}
 
-          {activeTab === "metrics" && (
-            <MetricsPage data={scrapedData} />
-          )}
+            {activeTab === "metrics" && (
+              <MetricsPage data={scrapedData} />
+            )}
+          </Suspense>
         </main>
       </div>
     </div>
