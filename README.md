@@ -114,7 +114,7 @@ La aplicacion web tiene vistas de **Extractor en Vivo**, **Acceso Movil LAN & QR
 
 ## 6. Metodologia: Domain-Driven Design (DDD)
 
-El proyecto adopta conceptos de DDD para ordenar el sistema alrededor del problema de auditar perfiles de creadores. El backend se organiza en contextos y contiene modelos de dominio con dataclasses; el flujo de infraestructura y las respuestas de la API todavia intercambian principalmente diccionarios y estructuras JSON.
+El proyecto adopta conceptos de DDD para ordenar el sistema alrededor del problema de auditar perfiles de creadores. Es una aplicacion **inspirada en DDD**: los contextos y el lenguaje del dominio guian la organizacion, pero varios modelos siguen representados como diccionarios y estructuras JSON, no como entidades de dominio formales.
 
 ### 6.1 Dominio
 
@@ -136,10 +136,10 @@ La tecnologia de scraping, los embeddings y el proveedor de IA son mecanismos qu
 
 | Contexto | Responsabilidad | Implementacion actual |
 |---|---|---|
-| `ScrapingContext` | Consultar TikTok y normalizar los datos recopilados | `contexts/scraping/infrastructure/tiktok_service.py` |
-| Analitica cuantitativa | Resumir actividad, frecuencia y hashtags; no existe como paquete/contexto independiente | Calculos distribuidos entre el scraping y las interfaces |
-| `PsychometricsContext` | Estimar puntajes OCEAN, arquetipo y afinidad de nichos | `contexts/psychometrics/infrastructure/psychometric_service.py` |
-| `AdvisoryContext` | Convertir informacion de perfil en un reporte ejecutivo | `contexts/advisory/infrastructure/gemini_service.py` |
+| `ScrapingContext` | Consultar TikTok y normalizar los datos recopilados | `TikTokScraperService` |
+| `MetricsContext` | Resumir actividad y calcular indicadores derivados | Backend y logica de presentacion web/movil |
+| `PsychometricsContext` | Estimar puntajes OCEAN, arquetipo y afinidad de nichos | `BigFiveEmbeddingService` |
+| `AdvisoryContext` | Convertir informacion de perfil en un reporte ejecutivo | `GeminiAuditService` |
 
 Los contextos se comunican mediante datos JSON. Por ejemplo, el servicio psicometrico recibe perfil, videos y comentarios; el reporte ejecutivo recibe perfil, psicometria y frecuencia.
 
@@ -164,7 +164,7 @@ El mismo vocabulario se usa en los contratos del backend y en las interfaces. La
 ```mermaid
 flowchart LR
     T[ TikTok ] --> S[ScrapingContext]
-    S --> M[Analitica de metricas]
+    S --> M[MetricsContext]
     S --> P[PsychometricsContext]
     M --> A[AdvisoryContext]
     P --> A
@@ -185,22 +185,13 @@ El mapa representa la separacion funcional del proyecto; no implica que existan 
 
 ### 6.6 Diseno tactico y alcance
 
-#### Entidades y modelos de dominio
+#### Entidades y conceptos con identidad
 
-El backend define algunos modelos de dominio mediante dataclasses:
+El flujo trabaja con conceptos identificables como perfil (`username`), video (`id`) y comentario (`id`). Actualmente se transportan como diccionarios dentro de la respuesta, no como clases entidad persistidas.
 
-| Tipo | Archivo | Datos que representa |
-|---|---|---|
-| `TargetProfile` | `contexts/scraping/domain/entities.py` | Perfil objetivo identificado por `username` y sus limites |
-| `ExtractionLimits` | `contexts/scraping/domain/entities.py` | Maximos de videos, comentarios, seguidores y seguidos |
-| `OceanProfile` | `contexts/psychometrics/domain/models.py` | Puntajes OCEAN, rasgo dominante, arquetipo y marcas sugeridas |
-| `ExecutiveAuditReport` | `contexts/advisory/domain/report.py` | Diagnostico, estrategia de monetizacion y consejo de mejora |
+#### Objetos de valor conceptuales
 
-Estos tipos estan definidos en sus contextos, pero actualmente no se usan de forma consistente en el flujo de servicios: la infraestructura sigue recibiendo y devolviendo diccionarios. Los videos y comentarios tambien se transportan como estructuras JSON, no como entidades persistidas.
-
-#### Objetos de valor
-
-`ExtractionLimits` es una dataclass que agrupa los limites de consulta y se comporta como un valor de configuracion. Los puntajes OCEAN, etiquetas de frecuencia, metricas y pares nicho/similitud tambien representan mediciones o valores del dominio, aunque en las respuestas actuales se serializan como campos de diccionarios.
+Los limites, puntajes OCEAN, etiquetas de frecuencia, metricas y pares nicho/similitud describen configuraciones o mediciones. Viajan como valores en la API; no todos estan encapsulados en tipos de valor dedicados.
 
 #### Servicios
 
@@ -212,7 +203,7 @@ Estos tipos estan definidos en sus contextos, pero actualmente no se usan de for
 
 #### Casos de uso y capa de aplicacion
 
-`backend/main.py` actua como punto de entrada: recibe solicitudes, coordina los servicios de los contextos y devuelve respuestas.
+`backend/main.py` actua como punto de entrada: recibe solicitudes, coordina servicios y devuelve respuestas.
 
 | Operacion | Flujo coordinado |
 |---|---|
@@ -280,21 +271,15 @@ VerifAI-Grupo2/
 ├── README
 ├── backend/
 │   ├── main.py
+│   ├── scraper.py
+│   ├── login.py
 │   ├── requirements.txt
-│   ├── contexts/
-│   │   ├── scraping/
-│   │   │   ├── domain/entities.py
-│   │   │   └── infrastructure/
-│   │   │       ├── login.py
-│   │   │       ├── scraper.py
-│   │   │       └── tiktok_service.py
-│   │   ├── psychometrics/
-│   │   │   ├── domain/models.py
-│   │   │   └── infrastructure/psychometric_service.py
-│   │   └── advisory/
-│   │       ├── domain/report.py
-│   │       └── infrastructure/gemini_service.py
-│   └── shared/utils/network.py
+│   ├── services/
+│   │   ├── tiktok_service.py
+│   │   ├── psychometric_service.py
+│   │   └── gemini_service.py
+│   └── utils/
+│       └── network.py
 ├── frontend/
 │   ├── package.json
 │   └── src/
@@ -315,13 +300,13 @@ VerifAI-Grupo2/
 
 ### 9.1 Requisitos
 
-- Python 3.11 o superior.
+- Python 3.11.
 - Node.js y npm.
 - Microsoft Edge instalado: el scraper lo inicia con Playwright usando el canal `msedge`.
 - Acceso a internet para TikTok y la descarga inicial del modelo de embeddings.
 - Una clave de Google Gemini para generar reportes ejecutivos.
 
-`backend/requirements.txt` incluye las dependencias del servidor, Playwright, Sentence Transformers, NumPy, scikit-learn y el SDK de Google Gemini.
+> En `backend/requirements.txt` estan las dependencias base del servidor. Los servicios tambien importan `sentence-transformers`, `scikit-learn`, `numpy` y `google-genai`; instala estos paquetes si no estan disponibles en tu entorno.
 
 ### 9.2 Instalar e iniciar el backend
 
@@ -329,13 +314,14 @@ Desde la raiz del repositorio, en Windows:
 
 ```powershell
 cd backend
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+python -m venv venv
+.\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
+pip install sentence-transformers scikit-learn numpy google-genai
 python main.py
 ```
 
-Si PowerShell bloquea la activacion del entorno, ejecuta `.venv\Scripts\activate.bat` desde `cmd.exe`.
+Si PowerShell bloquea la activacion del entorno, ejecuta `venv\Scripts\activate.bat` desde `cmd.exe`.
 
 El backend escucha en el puerto `8000`. La documentacion interactiva de FastAPI queda disponible en `http://localhost:8000/docs`.
 
@@ -355,7 +341,7 @@ En otra terminal, desde la raiz:
 
 ```powershell
 cd frontend
-npm ci
+npm install
 npm run dev
 ```
 
@@ -367,7 +353,7 @@ En otra terminal, desde la raiz:
 
 ```powershell
 cd mobile
-npm ci
+npm install
 npx expo start
 ```
 
