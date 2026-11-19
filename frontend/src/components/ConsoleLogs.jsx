@@ -2,10 +2,11 @@ import React, { useEffect, useRef } from "react";
 import { Terminal } from "lucide-react";
 
 export default function ConsoleLogs({ logs }) {
-  const endRef = useRef(null);
+  const consoleRef = useRef(null);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    const container = consoleRef.current;
+    if (container) container.scrollTop = container.scrollHeight;
   }, [logs]);
 
   return (
@@ -21,20 +22,19 @@ export default function ConsoleLogs({ logs }) {
             <Terminal className="w-3.5 h-3.5" /> Playwright DevTools Protocol & Anti-Bot Stepper
           </span>
         </div>
-        <span className="text-[11px] font-mono text-slate-500">playwright.async_api</span>
+        <span className="text-[11px] font-mono text-slate-500">Últimos {logs.length} registros</span>
       </div>
 
-      <div className="p-4 font-mono text-xs overflow-y-auto space-y-2 flex-1 bg-black/40 text-slate-300">
+      <div ref={consoleRef} className="p-4 font-mono text-xs overflow-y-auto space-y-2 flex-1 bg-black/40 text-slate-300">
         {logs.length === 0 ? (
           <p className="text-slate-600 italic">No hay tareas de extracción en curso...</p>
         ) : (
-          logs.map((log, i) => (
-            <div key={i} className="leading-relaxed">
-              <span className="text-slate-600">[{new Date().toLocaleTimeString()}]</span> {log}
+          logs.map((log) => (
+            <div key={log.id} className="leading-relaxed">
+              <span className="text-slate-600">[{log.time}]</span> {log.message}
             </div>
           ))
         )}
-        <div ref={endRef} />
       </div>
     </div>
   );

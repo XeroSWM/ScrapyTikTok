@@ -1,11 +1,18 @@
-import asyncio
+﻿import asyncio
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Cargar el .env ubicado en la misma carpeta que main.py (backend/.env)
+env_path = Path(__file__).resolve().parent / ".env"
+load_dotenv(dotenv_path=env_path)
+
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from utils.network import get_local_ip
-from services.tiktok_service import TikTokScraperService
-from services.psychometric_service import BigFiveEmbeddingService
-from services.gemini_service import GeminiAuditService
+from shared.utils.network import get_local_ip
+from contexts.scraping.infrastructure.tiktok_service import TikTokScraperService
+from contexts.psychometrics.infrastructure.psychometric_service import BigFiveEmbeddingService
+from contexts.advisory.infrastructure.gemini_service import GeminiAuditService
 
 app = FastAPI(title="TikTok Scraper & AI Backend API")
 
@@ -23,6 +30,7 @@ psychometric_service = BigFiveEmbeddingService()
 # Semáforo para proteger la memoria RAM y el perfil de Edge contra colisiones
 scrape_semaphore = asyncio.Semaphore(1)
 
+
 class ScrapeRequest(BaseModel):
     username: str
     target: str = "all"
@@ -31,10 +39,12 @@ class ScrapeRequest(BaseModel):
     max_following: int = 20
     max_followers: int = 20
 
+
 class BigFiveRequest(BaseModel):
     profile: dict
     videos: list = []
     comments: list = []
+
 
 @app.get("/api/info")
 def get_system_info():
@@ -42,6 +52,7 @@ def get_system_info():
         "local_ip": get_local_ip(),
         "port": 8000
     }
+
 
 @app.post("/api/analyze/big-five")
 def analyze_big_five_endpoint(payload: BigFiveRequest):
@@ -51,6 +62,7 @@ def analyze_big_five_endpoint(payload: BigFiveRequest):
         videos=payload.videos,
         comments=payload.comments
     )
+
 
 @app.post("/api/scrape")
 async def run_scrape_endpoint(payload: ScrapeRequest):
@@ -71,6 +83,7 @@ async def run_scrape_endpoint(payload: ScrapeRequest):
             comments=results.get("comments", [])
         )
         return results
+
 
 @app.websocket("/ws/scrape")
 async def websocket_scrape_endpoint(websocket: WebSocket):
@@ -125,17 +138,20 @@ async def websocket_scrape_endpoint(websocket: WebSocket):
             await websocket.close()
         except Exception:
             pass
-        
+
+
 gemini_service = None
 try:
     gemini_service = GeminiAuditService()
 except Exception as e:
     print(f"[WARN] Gemini no inicializado: {e}")
 
+
 class GeminiReportRequest(BaseModel):
     profile: dict
     psychometrics: dict
     frequency: str = "Moderada"
+
 
 @app.post("/api/ai/gemini-report")
 def get_gemini_report_endpoint(payload: GeminiReportRequest):
@@ -147,6 +163,7 @@ def get_gemini_report_endpoint(payload: GeminiReportRequest):
         psychometrics=payload.psychometrics,
         frequency=payload.frequency
     )
+
 
 if __name__ == "__main__":
     import uvicorn
